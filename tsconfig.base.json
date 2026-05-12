@@ -21,7 +21,10 @@
       ],
       "@angular-large-app/shared/ui-input": ["libs/shared/ui-input/src/index.ts"],
       "@angular-large-app/shared/ui-table": ["libs/shared/ui-table/src/index.ts"],
-      "@angular-large-app/shared/ui-modal": ["libs/shared/ui-modal/src/index.ts"]
+      "@angular-large-app/shared/ui-modal": ["libs/shared/ui-modal/src/index.ts"],
+      "@angular-large-app/dashboard/data-access-metrics": [
+        "libs/dashboard/data-access-metrics/src/index.ts"
+      ]
     },
     "strict": true,
     "noImplicitAny": true,
