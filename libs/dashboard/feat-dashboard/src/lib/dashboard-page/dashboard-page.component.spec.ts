@@ -65,7 +65,7 @@ describe('DashboardPageComponent', () => {
   it('renders activity count in header', () => {
     spectator.component.ngOnInit();
     spectator.detectChanges();
-    const header = spectator.query('.dashboard-header p');
-    expect(header?.textContent).toContain('10,000');
+    const eventsIndexed = spectator.query('.hero-stats strong');
+    expect(eventsIndexed?.textContent).toContain('10,000');
   });
 });

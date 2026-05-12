@@ -107,8 +107,27 @@
   margin: 0.15rem 0 0;
 }
 
-.filter-field {
+.filter-control {
+  display: grid;
+  gap: 0.45rem;
   width: min(320px, 100%);
+}
+
+.filter-label {
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.filter-field {
+  width: 100%;
+}
+
+.clear-filter-button {
+  color: #0f766e;
+  font-weight: 800;
+  min-width: 3.5rem;
 }
 
 .loading-state {
@@ -150,7 +169,7 @@
     flex-direction: column;
   }
 
-  .filter-field {
+  .filter-control {
     width: 100%;
   }
 }
