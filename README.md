@@ -1,101 +1,134 @@
-# TempNx
+# angular-large-app-architecture
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A reference Angular 18 + Nx 19 monorepo demonstrating enterprise-scale architecture patterns.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+[![CI](https://github.com/Ouokki/angular-large-app-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/Ouokki/angular-large-app-architecture/actions/workflows/ci.yml)
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Run tasks
+## Architecture Overview
 
-To run the dev server for your app, use:
+```text
+apps/
+  shell/                  # Host application (routing, layouts, providers)
 
-```sh
-npx nx serve shell
+libs/
+  shared/
+    ui-button/            # Accessible button: variants, sizes, loading state
+    ui-input/             # ControlValueAccessor input with reactive forms
+    ui-table/             # CDK virtual-scroll table (10k+ rows), sorting, filtering
+    ui-modal/             # CDK dialog modal with focus trap & escape handling
+
+  dashboard/
+    data-access-metrics/  # Signals-based MetricsService (transient state)
+    feat-dashboard/       # Dashboard page: metric cards + 10k-row activity table
+
+  settings/
+    data-access-settings/ # NgRx store: actions, reducer, selectors, effects
+    feat-settings/        # Settings page with reactive forms bound to NgRx
+
+tools/
+  generators/             # Custom Nx generators: lib-feat, lib-ui, lib-data-access
+
+docs/
+  adr/                    # Architecture Decision Records
 ```
 
-To create a production bundle:
+### Key Technology Decisions
 
-```sh
-npx nx build shell
+| Concern          | Choice                           | Rationale                                      |
+| ---------------- | -------------------------------- | ---------------------------------------------- |
+| Monorepo         | Nx 19                            | Module boundaries, affected builds, generators |
+| Package manager  | pnpm 10                          | Disk efficiency, strict hoisting               |
+| Angular version  | 18                               | Signals, `@if`/`@for` control flow, standalone |
+| Change detection | OnPush (enforced via ESLint)     | Performance at scale                           |
+| Transient state  | Angular Signals                  | Zero boilerplate, native CD integration        |
+| Persisted state  | NgRx 18                          | DevTools, effects, localStorage hydration      |
+| Styling          | Tailwind CSS 3.4 + CSS variables | Design tokens, dark mode via `data-theme`      |
+| Testing          | Jest 29 + @ngneat/spectator@17   | Fast, ergonomic component tests                |
+| Linting          | ESLint 9 flat config             | Module boundary + OnPush enforcement           |
+| Pre-commit       | Husky 9 + lint-staged 17         | Lint/format staged files before commit         |
+
+---
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm 10+
+
+## Getting Started
+
+```bash
+# Install dependencies
+pnpm install
+
+# Serve the shell app (development)
+pnpm exec nx serve shell
+
+# Run all unit tests
+pnpm exec nx run-many -t test --parallel=3
+
+# Lint all projects
+pnpm exec nx run-many -t lint --parallel=3
+
+# Build shell for production
+pnpm exec nx build shell --configuration=production
 ```
 
-To see all available targets to run for a project, run:
+## Module Boundary Rules
 
-```sh
-npx nx show project shell
-```
-        
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Library tags enforce a strict dependency graph:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```text
+Scope rules:
+  scope:shell     → scope:dashboard, scope:settings, scope:shared
+  scope:dashboard → scope:shared  (NOT scope:settings)
+  scope:settings  → scope:shared  (NOT scope:dashboard)
+  scope:shared    → scope:shared  (NOT any feature scope)
 
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
+Type rules:
+  type:feat         → type:ui, type:data-access, type:util
+  type:ui           → type:ui, type:util
+  type:data-access  → type:util
+  type:util         → type:util  (no upward dependencies)
 ```
 
-To generate a new library, use:
+Boundaries are enforced at lint time via `@nx/eslint-plugin` module boundary rules in `eslint.config.js`.
 
-```sh
-npx nx g @nx/angular:lib mylib
+## Custom Generators
+
+```bash
+# New feature library
+pnpm exec nx g workspace:lib-feat --name=my-feature --scope=dashboard
+
+# New UI library
+pnpm exec nx g workspace:lib-ui --name=my-widget --scope=shared
+
+# New data-access library (--withNgrx scaffolds NgRx boilerplate)
+pnpm exec nx g workspace:lib-data-access --name=my-store --scope=settings --withNgrx
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+## Architecture Decision Records
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+| ADR                                         | Title                                   |
+| ------------------------------------------- | --------------------------------------- |
+| [0001](docs/adr/0001-signals-vs-ngrx.md)    | Signals vs NgRx state strategy          |
+| [0002](docs/adr/0002-onpush-enforcement.md) | OnPush change detection mandate         |
+| [0003](docs/adr/0003-bundle-budgets.md)     | Bundle size budgets and optimizer flags |
 
-## Set up CI!
+## Performance Configuration
 
-### Step 1
+- **OnPush everywhere** — enforced via `@angular-eslint/prefer-on-push-component-change-detection: error`
+- **CDK Virtual Scroll** — `ui-table` renders only visible rows; tested with 10 000 rows
+- **Lazy routes** — all feature pages loaded on demand via `loadComponent()`
+- **Selective preloading** — `SelectivePreloadStrategy` preloads on fast connections only
+- **Bundle budgets** — initial 350 KB warn / 600 KB error; lazy 150 KB warn / 300 KB error
+- **Optimizer flags** — `inlineCritical: true` for faster FCP in production
 
-To connect to Nx Cloud, run the following command:
+## Contributing
 
-```sh
-npx nx connect
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## License
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+[MIT](LICENSE)
