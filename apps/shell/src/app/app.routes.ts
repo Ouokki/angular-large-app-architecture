@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { loadRemoteModule } from '@nx/angular/mf';
 
 export const appRoutes: Route[] = [
   {
@@ -23,6 +24,12 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('@angular-large-app/settings/feat-settings').then((m) => m.SettingsPageComponent),
+    data: { preload: false },
+  },
+  {
+    path: 'widgets',
+    canActivate: [authGuard],
+    loadChildren: () => loadRemoteModule('remote-widgets', './Routes').then((m) => m.remoteRoutes),
     data: { preload: false },
   },
   {

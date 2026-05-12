@@ -15,13 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-large-app/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
-      "@angular-large-app/shared/ui-button/ui-button": [
-        "libs/shared/ui-button/ui-button/src/index.ts"
-      ],
-      "@angular-large-app/shared/ui-input": ["libs/shared/ui-input/src/index.ts"],
-      "@angular-large-app/shared/ui-table": ["libs/shared/ui-table/src/index.ts"],
-      "@angular-large-app/shared/ui-modal": ["libs/shared/ui-modal/src/index.ts"],
       "@angular-large-app/dashboard/data-access-metrics": [
         "libs/dashboard/data-access-metrics/src/index.ts"
       ],
@@ -29,7 +22,15 @@
       "@angular-large-app/settings/data-access-settings": [
         "libs/settings/data-access-settings/src/index.ts"
       ],
-      "@angular-large-app/settings/feat-settings": ["libs/settings/feat-settings/src/index.ts"]
+      "@angular-large-app/settings/feat-settings": ["libs/settings/feat-settings/src/index.ts"],
+      "@angular-large-app/shared/ui-button": ["libs/shared/ui-button/src/index.ts"],
+      "@angular-large-app/shared/ui-button/ui-button": [
+        "libs/shared/ui-button/ui-button/src/index.ts"
+      ],
+      "@angular-large-app/shared/ui-input": ["libs/shared/ui-input/src/index.ts"],
+      "@angular-large-app/shared/ui-modal": ["libs/shared/ui-modal/src/index.ts"],
+      "@angular-large-app/shared/ui-table": ["libs/shared/ui-table/src/index.ts"],
+      "remote-widgets/Routes": ["apps/remote-widgets/src/app/remote-entry/entry.routes.ts"]
     },
     "strict": true,
     "noImplicitAny": true,

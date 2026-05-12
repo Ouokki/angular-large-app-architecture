@@ -41,6 +41,9 @@ importers:
       '@ngrx/store':
         specifier: ^18.1.1
         version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      '@nx/angular':
+        specifier: 19.8.14
+        version: 19.8.14(@angular-devkit/build-angular@18.2.21(8ff9da77daaea388a01ce6717a90a14b))(@angular-devkit/core@18.2.21(chokidar@3.6.0))(@angular-devkit/schematics@18.2.21(chokidar@3.6.0))(@babel/traverse@7.29.0)(@schematics/angular@18.2.21(chokidar@3.6.0))(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))(@types/node@18.16.9)(@zkochan/js-yaml@0.0.7)(eslint@9.39.4(jiti@1.21.7))(nx@19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21)))(postcss@8.5.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rxjs@7.8.2)(typescript@5.5.4)
       rxjs:
         specifier: ~7.8.0
         version: 7.8.2
@@ -75,12 +78,12 @@ importers:
       '@eslint/js':
         specifier: ^9.8.0
         version: 9.39.4
+      '@module-federation/enhanced':
+        specifier: ~0.6.0
+        version: 0.6.16(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.4)(webpack@5.106.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(postcss@8.5.14))
       '@ngneat/spectator':
         specifier: ^17.1.0
         version: 17.1.0(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/router@18.2.14(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2))
-      '@nx/angular':
-        specifier: 19.8.14
-        version: 19.8.14(@angular-devkit/build-angular@18.2.21(8ff9da77daaea388a01ce6717a90a14b))(@angular-devkit/core@18.2.21(chokidar@3.6.0))(@angular-devkit/schematics@18.2.21(chokidar@3.6.0))(@babel/traverse@7.29.0)(@schematics/angular@18.2.21(chokidar@3.6.0))(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))(@types/node@18.16.9)(@zkochan/js-yaml@0.0.7)(eslint@9.39.4(jiti@1.21.7))(nx@19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21)))(postcss@8.5.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(rxjs@7.8.2)(typescript@5.5.4)
       '@nx/eslint':
         specifier: 19.8.14
         version: 19.8.14(@babel/traverse@7.29.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))(@types/node@18.16.9)(@zkochan/js-yaml@0.0.7)(eslint@9.39.4(jiti@1.21.7))(nx@19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21)))
@@ -99,6 +102,9 @@ importers:
       '@nx/web':
         specifier: 19.8.14
         version: 19.8.14(@babel/traverse@7.29.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))(@types/node@18.16.9)(nx@19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21)))(typescript@5.5.4)
+      '@nx/webpack':
+        specifier: 19.8.14
+        version: 19.8.14(@babel/traverse@7.29.0)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))(@types/node@18.16.9)(nx@19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21)))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.4)
       '@nx/workspace':
         specifier: 19.8.14
         version: 19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))

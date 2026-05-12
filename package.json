@@ -19,7 +19,8 @@
     "@ngrx/effects": "^18.1.1",
     "@ngrx/store": "^18.1.1",
     "rxjs": "~7.8.0",
-    "zone.js": "~0.14.3"
+    "zone.js": "~0.14.3",
+    "@nx/angular": "19.8.14"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~18.2.0",
@@ -31,14 +32,15 @@
     "@commitlint/cli": "^21.0.0",
     "@commitlint/config-conventional": "^21.0.0",
     "@eslint/js": "^9.8.0",
+    "@module-federation/enhanced": "~0.6.0",
     "@ngneat/spectator": "^17.1.0",
-    "@nx/angular": "19.8.14",
     "@nx/eslint": "19.8.14",
     "@nx/eslint-plugin": "19.8.14",
     "@nx/jest": "19.8.14",
     "@nx/js": "19.8.14",
     "@nx/plugin": "^19.8.14",
     "@nx/web": "19.8.14",
+    "@nx/webpack": "19.8.14",
     "@nx/workspace": "19.8.14",
     "@schematics/angular": "~18.2.0",
     "@swc-node/register": "~1.9.1",

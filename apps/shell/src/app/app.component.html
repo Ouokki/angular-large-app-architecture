@@ -1,10 +1,14 @@
-<header class="app-shell-header">
-  <nav class="app-nav" aria-label="Main navigation">
-    <a routerLink="/dashboard" routerLinkActive="nav-active" class="nav-link">Dashboard</a>
-    <a routerLink="/settings" routerLinkActive="nav-active" class="nav-link">Settings</a>
-  </nav>
-</header>
-
-<main class="app-shell-content">
-  <router-outlet />
+<nav class="bg-surface border-b border-border px-6 py-3 flex items-center gap-6">
+  <a routerLink="/dashboard" routerLinkActive="text-primary font-semibold" class="text-sm">
+    Dashboard
+  </a>
+  <a routerLink="/settings" routerLinkActive="text-primary font-semibold" class="text-sm">
+    Settings
+  </a>
+  <a routerLink="/widgets" routerLinkActive="text-primary font-semibold" class="text-sm">
+    Widgets
+  </a>
+</nav>
+<main class="flex-1 overflow-auto">
+  <router-outlet></router-outlet>
 </main>
