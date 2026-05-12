@@ -1,0 +1,33 @@
+<div
+  class="modal-panel"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="'modal-title'"
+  cdkTrapFocus
+  cdkTrapFocusAutoCapture
+>
+  <header class="modal-header">
+    <h2 id="modal-title" class="text-lg font-semibold text-[var(--color-text)]">
+      {{ resolvedTitle }}
+    </h2>
+  </header>
+
+  @if (resolvedMessage) {
+  <div class="modal-body">
+    <p class="text-sm text-[var(--color-text-secondary)]">{{ resolvedMessage }}</p>
+  </div>
+  }
+
+  <ng-content />
+
+  <footer class="modal-footer">
+    @if (!hideCancel()) {
+    <button class="btn btn-ghost" type="button" (click)="onCancel()">
+      {{ resolvedCancelLabel }}
+    </button>
+    }
+    <button class="btn btn-primary" type="button" cdkFocusInitial (click)="onConfirm()">
+      {{ resolvedConfirmLabel }}
+    </button>
+  </footer>
+</div>
