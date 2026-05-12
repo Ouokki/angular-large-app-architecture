@@ -72,7 +72,8 @@
           "buildTarget": "shell:build:production"
         },
         "development": {
-          "buildTarget": "shell:build:development"
+          "buildTarget": "shell:build:development",
+          "devRemotes": ["remote-widgets"]
         }
       },
       "defaultConfiguration": "development",

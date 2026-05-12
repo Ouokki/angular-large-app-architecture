@@ -1,39 +1,193 @@
-.app-shell-header {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  padding: 0 2rem;
+:host {
+  display: block;
+}
+
+.app-frame {
+  background: linear-gradient(135deg, rgb(15 118 110 / 0.08), transparent 28rem),
+    linear-gradient(180deg, #f7f8fb 0%, #edf1f6 100%);
+  color: var(--color-text);
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  background: #0f172a;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 100vh;
+  padding: 1.25rem;
   position: sticky;
   top: 0;
-  z-index: 100;
+}
+
+.brand {
+  align-items: center;
+  color: inherit;
+  display: inline-flex;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brand-mark {
+  align-items: center;
+  background: linear-gradient(135deg, #14b8a6, #6366f1);
+  border-radius: 0.5rem;
+  color: #fff;
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 900;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+
+  strong {
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  small {
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
 }
 
 .app-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  height: 56px;
+  display: grid;
+  gap: 0.35rem;
 }
 
-.nav-link {
-  border-radius: var(--radius-sm);
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0.375rem 0.75rem;
-  text-decoration: none;
-  transition: color 150ms ease, background-color 150ms ease;
+.app-nav a.mat-mdc-button {
+  --mdc-text-button-label-text-color: #cbd5e1;
+  border-radius: 0.5rem;
+  justify-content: flex-start;
+  min-height: 42px;
+  padding: 0 0.85rem;
+  text-align: left;
+  width: 100%;
 
-  &:hover {
-    background: var(--color-surface-hover);
-    color: var(--color-text);
+  &:hover,
+  &.nav-active {
+    --mdc-text-button-label-text-color: #fff;
+    background: rgb(255 255 255 / 0.1);
   }
 
   &.nav-active {
-    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-    color: var(--color-primary);
+    box-shadow: inset 3px 0 0 #14b8a6;
+  }
+}
+
+.sidebar-panel {
+  background: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.65rem;
+  display: grid;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding: 1rem;
+
+  strong {
+    color: #fff;
+    font-size: 0.92rem;
+  }
+
+  small {
+    color: #94a3b8;
+    line-height: 1.45;
+  }
+}
+
+.panel-kicker,
+.workspace-kicker {
+  color: #14b8a6;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.workspace-header {
+  align-items: center;
+  background: rgb(255 255 255 / 0.76);
+  border-bottom: 1px solid rgb(203 213 225 / 0.7);
+  display: flex;
+  justify-content: space-between;
+  min-height: 82px;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(18px);
+
+  h1 {
+    color: #0f172a;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0.15rem 0 0;
+  }
+}
+
+.workspace-status {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dbe3ec;
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+
+  span {
+    color: #64748b;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  strong {
+    color: #0f766e;
+    font-size: 0.76rem;
+    font-weight: 800;
   }
 }
 
 .app-shell-content {
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 82px);
+}
+
+@media (max-width: 860px) {
+  .app-frame {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    min-height: auto;
+    position: static;
+  }
+
+  .app-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sidebar-panel {
+    display: none;
+  }
+
+  .workspace-header {
+    padding: 1rem;
+  }
 }

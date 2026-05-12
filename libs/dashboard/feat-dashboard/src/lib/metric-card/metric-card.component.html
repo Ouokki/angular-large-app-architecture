@@ -1,8 +1,28 @@
-<div class="metric-card" role="region" [attr.aria-label]="card().label">
-  <p class="metric-label">{{ card().label }}</p>
-  <p class="metric-value">{{ formattedValue }}</p>
-  <p class="metric-trend" [class]="trendClass" aria-live="polite">
-    <span aria-hidden="true">{{ trendIcon }}</span>
-    {{ card().trend | number : '1.1-1' }}%
-  </p>
-</div>
+<mat-card
+  class="metric-card"
+  [class.metric-card-up]="card().trendDirection === 'up'"
+  [class.metric-card-down]="card().trendDirection === 'down'"
+  [class.metric-card-flat]="card().trendDirection === 'flat'"
+  appearance="outlined"
+  role="region"
+  [attr.aria-label]="card().label"
+>
+  <mat-card-content>
+    <div class="metric-topline">
+      <p class="metric-label">{{ card().label }}</p>
+      <mat-chip class="metric-trend" [class]="trendClass" aria-live="polite">
+        <span aria-hidden="true">{{ trendIcon }}</span>
+        {{ card().trend | number : '1.1-1' }}%
+      </mat-chip>
+    </div>
+
+    <p class="metric-value">{{ formattedValue }}</p>
+    <div class="metric-sparkline" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </mat-card-content>
+</mat-card>

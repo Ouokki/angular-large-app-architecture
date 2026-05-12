@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { MetricCard } from '@angular-large-app/dashboard/data-access-metrics';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-metric-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, MatCardModule, MatChipsModule],
   templateUrl: './metric-card.component.html',
   styleUrl: './metric-card.component.scss',
 })

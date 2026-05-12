@@ -1,19 +1,44 @@
-<nav class="bg-surface border-b border-border px-6 py-3 flex items-center gap-6">
-  <a routerLink="/dashboard" routerLinkActive="text-primary font-semibold" class="text-sm">
-    Dashboard
-  </a>
-  <a routerLink="/settings" routerLinkActive="text-primary font-semibold" class="text-sm">
-    Settings
-  </a>
-  <a routerLink="/widgets" routerLinkActive="text-primary font-semibold" class="text-sm">
-    Widgets
-  </a>
-</nav>
+<div class="app-frame">
+  <aside class="app-sidebar" aria-label="Application navigation">
+    <a class="brand" routerLink="/dashboard" aria-label="Angular Architecture dashboard">
+      <span class="brand-mark" aria-hidden="true">AA</span>
+      <span class="brand-copy">
+        <strong>Angular Architecture</strong>
+        <small>Enterprise workspace</small>
+      </span>
+    </a>
 
-@if (isNavigating()) {
-<div class="h-0.5 bg-primary animate-pulse" role="progressbar" aria-label="Loading page"></div>
-}
+    <nav class="app-nav" aria-label="Primary navigation">
+      <a mat-button routerLink="/dashboard" routerLinkActive="nav-active">Dashboard</a>
+      <a mat-button routerLink="/settings" routerLinkActive="nav-active">Settings</a>
+      <a mat-button routerLink="/widgets" routerLinkActive="nav-active">Widgets</a>
+    </nav>
 
-<main class="flex-1 overflow-auto">
-  <router-outlet></router-outlet>
-</main>
+    <div class="sidebar-panel">
+      <span class="panel-kicker">Runtime</span>
+      <strong>Module Federation</strong>
+      <small>Shell and remote widgets are served locally.</small>
+    </div>
+  </aside>
+
+  <section class="workspace">
+    <header class="workspace-header">
+      <div>
+        <p class="workspace-kicker">Architecture Console</p>
+        <h1>Application workspace</h1>
+      </div>
+      <div class="workspace-status" aria-label="Environment status">
+        <span>Local</span>
+        <strong>Healthy</strong>
+      </div>
+    </header>
+
+    @if (isNavigating()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading page"></mat-progress-bar>
+    }
+
+    <main class="app-shell-content">
+      <router-outlet></router-outlet>
+    </main>
+  </section>
+</div>

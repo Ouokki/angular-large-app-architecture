@@ -1,3 +1,4 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'theme.css';
 
 @tailwind base;
@@ -11,8 +12,21 @@
 }
 
 body {
-  background-color: var(--color-bg);
+  background-color: #edf1f6;
   color: var(--color-text);
   font-family: var(--font-sans);
   margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-container-shape: 8px;
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-shape: 8px;
+  --mdc-outlined-card-container-shape: 8px;
 }

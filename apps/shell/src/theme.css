@@ -44,6 +44,11 @@
   --color-text-muted: var(--color-neutral-500);
   --color-border: var(--color-neutral-200);
   --color-border-strong: var(--color-neutral-300);
+  --color-primary: var(--color-primary-600);
+  --color-primary-soft: #eef2ff;
+  --color-surface: var(--color-bg-surface);
+  --color-surface-hover: var(--color-bg-muted);
+  --color-text-secondary: var(--color-text-muted);
 
   /* --- Typography --- */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -96,6 +101,11 @@
   --color-text-muted: var(--color-neutral-400);
   --color-border: var(--color-neutral-700);
   --color-border-strong: var(--color-neutral-600);
+  --color-primary: var(--color-primary-400);
+  --color-primary-soft: rgb(99 102 241 / 0.18);
+  --color-surface: var(--color-bg-surface);
+  --color-surface-hover: var(--color-bg-muted);
+  --color-text-secondary: var(--color-text-muted);
 
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);

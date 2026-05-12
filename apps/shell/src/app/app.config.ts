@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { SelectivePreloadStrategy } from './preloading/selective-preload.strategy';
 import { provideHttpClient } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { appRoutes } from './app.routes';
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withPreloading(SelectivePreloadStrategy),
     ),
+    provideAnimations(),
     provideHttpClient(),
     provideStore({ [SETTINGS_FEATURE_KEY]: settingsReducer }),
     provideEffects([SettingsEffects]),

@@ -1,15 +1,32 @@
 <main class="dashboard-page">
-  <header class="dashboard-header">
-    <h1 class="text-2xl font-bold text-[var(--color-text)]">Dashboard</h1>
-    <p class="text-sm text-[var(--color-text-secondary)]">
-      {{ activity().length | number }} activity events
-    </p>
-  </header>
+  <section class="dashboard-hero" aria-labelledby="dashboard-title">
+    <div class="hero-copy">
+      <p class="eyebrow">Workspace analytics</p>
+      <h1 id="dashboard-title">Dashboard</h1>
+      <p class="hero-subtitle">
+        Monitor product usage, service volume, and recent platform events.
+      </p>
+    </div>
+    <div class="hero-stats" aria-label="Summary">
+      <div>
+        <span>Events indexed</span>
+        <strong>{{ activity().length | number }}</strong>
+      </div>
+      <div>
+        <span>Remote</span>
+        <strong>Online</strong>
+      </div>
+      <div>
+        <span>Mode</span>
+        <strong>Local</strong>
+      </div>
+    </div>
+  </section>
 
   @if (loading()) {
   <div class="loading-state" role="status" aria-live="polite">
-    <span class="sr-only">Loading metrics…</span>
-    <div class="spinner" aria-hidden="true"></div>
+    <mat-spinner diameter="42" aria-hidden="true"></mat-spinner>
+    <span class="sr-only">Loading metrics...</span>
   </div>
   } @if (error()) {
   <div class="error-banner" role="alert">
@@ -24,14 +41,33 @@
 
   <section class="activity-section" aria-label="Activity log">
     <div class="activity-header">
-      <h2 class="text-lg font-semibold text-[var(--color-text)]">Activity Log</h2>
-      <input
-        class="filter-input"
-        type="search"
-        placeholder="Filter activity…"
-        aria-label="Filter activity rows"
-        (input)="onFilter($event)"
-      />
+      <div>
+        <p class="eyebrow">Live activity</p>
+        <h2>Activity Log</h2>
+      </div>
+
+      <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
+        <mat-label>Filter activity</mat-label>
+        <input
+          #activityFilter
+          matInput
+          type="search"
+          [value]="filterText()"
+          aria-label="Filter activity rows"
+          (input)="onFilter($event)"
+        />
+        @if (filterText()) {
+        <button
+          mat-button
+          matSuffix
+          type="button"
+          aria-label="Clear activity filter"
+          (click)="clearFilter(activityFilter)"
+        >
+          Clear
+        </button>
+        }
+      </mat-form-field>
     </div>
 
     <app-ui-table

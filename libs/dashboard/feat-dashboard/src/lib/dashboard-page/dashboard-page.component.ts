@@ -2,6 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { DecimalPipe } from '@angular/common';
 import { MetricsService } from '@angular-large-app/dashboard/data-access-metrics';
 import { TableComponent, TableColumn, TableRow } from '@angular-large-app/shared/ui-table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MetricCardComponent } from '../metric-card/metric-card.component';
 
 const ACTIVITY_COLUMNS: TableColumn[] = [
@@ -17,7 +21,15 @@ const ACTIVITY_COLUMNS: TableColumn[] = [
   selector: 'app-dashboard-page',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MetricCardComponent, TableComponent, DecimalPipe],
+  imports: [
+    MetricCardComponent,
+    TableComponent,
+    DecimalPipe,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss',
 })
@@ -39,6 +51,12 @@ export class DashboardPageComponent implements OnInit {
   protected onFilter(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.filterText.set(input.value);
+  }
+
+  protected clearFilter(input: HTMLInputElement): void {
+    input.value = '';
+    this.filterText.set('');
+    input.focus();
   }
 
   protected get activityAsRows(): TableRow[] {

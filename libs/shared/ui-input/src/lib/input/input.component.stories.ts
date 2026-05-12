@@ -12,11 +12,11 @@ const meta: Meta<InputComponent> = {
     },
     placeholder: { control: 'text' },
     label: { control: 'text' },
-    errorMessage: { control: 'text' },
+    hint: { control: 'text' },
   },
   render: (args) => ({
     props: args,
-    template: `<app-ui-input [type]="type" [placeholder]="placeholder" [label]="label" [errorMessage]="errorMessage" />`,
+    template: `<app-ui-input [type]="type" [placeholder]="placeholder" [label]="label" [hint]="hint" />`,
   }),
 };
 
@@ -27,14 +27,14 @@ export const Default: Story = {
   args: { type: 'text', placeholder: 'Enter text…', label: 'Label' },
 };
 
-export const WithError: Story = {
+export const WithHint: Story = {
   args: {
     type: 'text',
     label: 'Email',
     placeholder: 'you@example.com',
-    errorMessage: 'Invalid email address',
+    hint: 'Validation errors appear below the field.',
   },
-  name: 'With validation error',
+  name: 'With hint text',
 };
 
 export const Password: Story = {

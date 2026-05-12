@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 
 export type WidgetCategory = 'form' | 'layout' | 'data' | 'feedback';
 export type WidgetStatus = 'stable' | 'beta' | 'new';
@@ -90,79 +93,273 @@ const CATEGORY_LABELS: Record<WidgetCategory, string> = {
 };
 
 const STATUS_CLASSES: Record<WidgetStatus, string> = {
-  stable: 'bg-success/10 text-success',
-  beta: 'bg-warning/10 text-warning',
-  new: 'bg-primary/10 text-primary',
+  stable: 'status-stable',
+  beta: 'status-beta',
+  new: 'status-new',
 };
 
 @Component({
   standalone: true,
   selector: 'app-widget-catalog',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, MatButtonModule, MatCardModule, MatChipsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="p-6">
-      <header class="mb-6">
-        <h1 class="text-2xl font-bold text-text-primary">Widget Catalog</h1>
-        <p class="mt-1 text-sm text-text-secondary">
-          {{ filteredWidgets().length }} of {{ allWidgets.length }} components
-        </p>
+    <main class="catalog-page">
+      <header class="catalog-hero">
+        <div>
+          <p class="eyebrow">Remote library</p>
+          <h1>Widget Catalog</h1>
+          <p class="hero-subtitle">
+            Curated standalone UI packages exposed by the remote widgets application.
+          </p>
+        </div>
+        <div class="catalog-count">
+          <span>Components</span>
+          <strong>{{ filteredWidgets().length }}/{{ allWidgets.length }}</strong>
+        </div>
       </header>
 
-      <div class="mb-4 flex flex-wrap gap-2">
+      <div class="filter-row" aria-label="Widget category filters">
         <button
+          mat-button
           (click)="setFilter(null)"
-          [class]="
-            activeFilter() === null
-              ? 'bg-primary text-white'
-              : 'bg-surface border border-border text-text-secondary hover:border-primary'
-          "
-          class="rounded-full px-4 py-1 text-sm transition-colors"
+          class="filter-button"
+          [class.filter-active]="activeFilter() === null"
         >
           All
         </button>
         @for (cat of categories; track cat) {
         <button
+          mat-button
           (click)="setFilter(cat)"
-          [class]="
-            activeFilter() === cat
-              ? 'bg-primary text-white'
-              : 'bg-surface border border-border text-text-secondary hover:border-primary'
-          "
-          class="rounded-full px-4 py-1 text-sm transition-colors"
+          class="filter-button"
+          [class.filter-active]="activeFilter() === cat"
         >
           {{ categoryLabel(cat) }}
         </button>
         }
       </div>
 
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section class="widget-grid" aria-label="Available widgets">
         @for (widget of filteredWidgets(); track widget.id) {
-        <article class="rounded-lg border border-border bg-surface p-4 flex flex-col gap-3">
-          <div class="flex items-start justify-between">
-            <h2 class="font-semibold text-text-primary">{{ widget.name }}</h2>
-            <span
-              class="rounded-full px-2 py-0.5 text-xs font-medium capitalize"
-              [class]="statusClass(widget.status)"
-              >{{ widget.status }}</span
-            >
+        <mat-card class="widget-card" appearance="outlined">
+          <div class="widget-card-header">
+            <div>
+              <p>{{ categoryLabel(widget.category) }}</p>
+              <h2>{{ widget.name }}</h2>
+            </div>
+            <mat-chip [class]="statusClass(widget.status)">{{ widget.status }}</mat-chip>
           </div>
-          <p class="flex-1 text-sm text-text-secondary">{{ widget.description }}</p>
-          <footer
-            class="flex items-center justify-between text-xs text-text-tertiary border-t border-border pt-3"
-          >
-            <span>v{{ widget.version }}</span>
-            <span>{{ widget.downloads | number }} downloads</span>
+          <p class="widget-description">{{ widget.description }}</p>
+          <code>{{ widget.importPath }}</code>
+          <footer>
+            <span>Version {{ widget.version }}</span>
+            <strong>{{ widget.downloads | number }} downloads</strong>
           </footer>
-        </article>
+        </mat-card>
         }
-      </div>
+      </section>
 
       @if (filteredWidgets().length === 0) {
-      <p class="mt-12 text-center text-text-secondary">No widgets in this category yet.</p>
+      <p class="empty-state">No widgets in this category yet.</p>
       }
-    </div>
+    </main>
   `,
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+
+      .catalog-page {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        margin: 0 auto;
+        max-width: 1440px;
+        padding: 1.5rem 2rem 2rem;
+      }
+
+      .catalog-hero {
+        align-items: stretch;
+        background: linear-gradient(135deg, rgb(15 23 42 / 0.94), rgb(30 41 59 / 0.92)),
+          linear-gradient(135deg, #0f766e, #4f46e5);
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 45px rgb(15 23 42 / 0.16);
+        color: #fff;
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        padding: 1.5rem;
+      }
+
+      .eyebrow {
+        color: #2dd4bf;
+        font-size: 0.72rem;
+        font-weight: 850;
+        letter-spacing: 0;
+        margin: 0;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 900;
+        line-height: 1;
+        margin: 0.2rem 0 0.5rem;
+      }
+
+      .hero-subtitle {
+        color: #cbd5e1;
+        margin: 0;
+        max-width: 42rem;
+      }
+
+      .catalog-count {
+        background: rgb(255 255 255 / 0.09);
+        border: 1px solid rgb(255 255 255 / 0.12);
+        border-radius: 0.65rem;
+        display: grid;
+        min-width: 150px;
+        padding: 0.9rem;
+      }
+
+      .catalog-count span {
+        color: #94a3b8;
+        font-size: 0.72rem;
+        font-weight: 850;
+        text-transform: uppercase;
+      }
+
+      .catalog-count strong {
+        color: #fff;
+        font-size: 1.4rem;
+        font-weight: 900;
+      }
+
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .filter-button.mat-mdc-button {
+        border: 1px solid #dbe3ec;
+        border-radius: 999px;
+        color: #475569;
+        font-weight: 800;
+      }
+
+      .filter-button.filter-active {
+        background: #0f172a;
+        color: #fff;
+      }
+
+      .widget-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .widget-card.mat-mdc-card {
+        background: #fff;
+        border-color: #dbe3ec;
+        border-radius: 0.75rem;
+        box-shadow: 0 14px 34px rgb(15 23 42 / 0.07);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .widget-card-header {
+        align-items: flex-start;
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+      }
+
+      .widget-card-header p {
+        color: #0f766e;
+        font-size: 0.72rem;
+        font-weight: 850;
+        margin: 0 0 0.25rem;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        color: #0f172a;
+        font-size: 1.05rem;
+        font-weight: 900;
+        margin: 0;
+      }
+
+      .widget-description {
+        color: #64748b;
+        flex: 1;
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      code {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.45rem;
+        color: #334155;
+        display: block;
+        font-size: 0.78rem;
+        overflow: hidden;
+        padding: 0.65rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      footer {
+        align-items: center;
+        border-top: 1px solid #e2e8f0;
+        color: #64748b;
+        display: flex;
+        font-size: 0.78rem;
+        justify-content: space-between;
+        padding-top: 0.85rem;
+      }
+
+      footer strong {
+        color: #0f172a;
+      }
+
+      .status-stable {
+        --mdc-chip-elevated-container-color: #dcfce7;
+        --mdc-chip-label-text-color: #166534;
+      }
+
+      .status-beta {
+        --mdc-chip-elevated-container-color: #fef3c7;
+        --mdc-chip-label-text-color: #92400e;
+      }
+
+      .status-new {
+        --mdc-chip-elevated-container-color: #eef2ff;
+        --mdc-chip-label-text-color: #4338ca;
+      }
+
+      .empty-state {
+        color: #64748b;
+        padding: 3rem;
+        text-align: center;
+      }
+
+      @media (max-width: 720px) {
+        .catalog-page {
+          padding: 1rem;
+        }
+
+        .catalog-hero {
+          flex-direction: column;
+        }
+      }
+    `,
+  ],
 })
 export class WidgetCatalogComponent {
   protected readonly allWidgets = WIDGET_CATALOG;

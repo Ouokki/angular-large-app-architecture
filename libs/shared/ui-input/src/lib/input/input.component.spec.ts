@@ -31,7 +31,7 @@ describe('InputComponent', () => {
   it('renders hint text when no error', () => {
     spectator.setInput('hint', 'Enter your email');
     spectator.detectChanges();
-    expect(spectator.query('span')?.textContent?.trim()).toBe('Enter your email');
+    expect(spectator.element.textContent).toContain('Enter your email');
   });
 
   it('sets the input type attribute', () => {

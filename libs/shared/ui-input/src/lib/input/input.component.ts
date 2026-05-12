@@ -14,6 +14,8 @@ import {
   NgControl,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url';
 
@@ -21,7 +23,7 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 't
   selector: 'app-ui-input',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   providers: [
