@@ -46,3 +46,6 @@ Thumbs.db
 # Local prompt and AI config files
 claude-code-prompt-angular.md
 temp-nx/
+
+
+storybook-static
