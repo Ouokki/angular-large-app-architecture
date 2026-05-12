@@ -1,5 +1,11 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withPreloading,
+  withViewTransitions,
+} from '@angular/router';
+import { SelectivePreloadStrategy } from './preloading/selective-preload.strategy';
 import { provideHttpClient } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
@@ -13,7 +19,12 @@ import {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes, withComponentInputBinding(), withViewTransitions()),
+    provideRouter(
+      appRoutes,
+      withComponentInputBinding(),
+      withViewTransitions(),
+      withPreloading(SelectivePreloadStrategy),
+    ),
     provideHttpClient(),
     provideStore({ [SETTINGS_FEATURE_KEY]: settingsReducer }),
     provideEffects([SettingsEffects]),
