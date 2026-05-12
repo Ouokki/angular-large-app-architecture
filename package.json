@@ -28,6 +28,7 @@
     "@commitlint/cli": "^21.0.0",
     "@commitlint/config-conventional": "^21.0.0",
     "@eslint/js": "^9.8.0",
+    "@ngneat/spectator": "^17.1.0",
     "@nx/angular": "19.8.14",
     "@nx/eslint": "19.8.14",
     "@nx/eslint-plugin": "19.8.14",
