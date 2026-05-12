@@ -1,1 +1,10 @@
-<app-nx-welcome></app-nx-welcome> <router-outlet></router-outlet>
+<header class="app-shell-header">
+  <nav class="app-nav" aria-label="Main navigation">
+    <a routerLink="/dashboard" routerLinkActive="nav-active" class="nav-link">Dashboard</a>
+    <a routerLink="/settings" routerLinkActive="nav-active" class="nav-link">Settings</a>
+  </nav>
+</header>
+
+<main class="app-shell-content">
+  <router-outlet />
+</main>
