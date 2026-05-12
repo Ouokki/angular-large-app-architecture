@@ -29,7 +29,12 @@ export const appRoutes: Route[] = [
   {
     path: 'widgets',
     canActivate: [authGuard],
-    loadChildren: () => loadRemoteModule('remote-widgets', './Routes').then((m) => m.remoteRoutes),
+    // Remote failure falls back to a local error page so the shell stays usable
+    // when remote-widgets is not deployed or the network is unavailable.
+    loadChildren: () =>
+      loadRemoteModule('remote-widgets', './Routes')
+        .then((m) => m.remoteRoutes)
+        .catch(() => import('./remote-error/remote-error.routes').then((m) => m.remoteErrorRoutes)),
     data: { preload: false },
   },
   {

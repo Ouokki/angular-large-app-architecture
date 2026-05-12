@@ -9,6 +9,11 @@
     Widgets
   </a>
 </nav>
+
+@if (isNavigating()) {
+<div class="h-0.5 bg-primary animate-pulse" role="progressbar" aria-label="Loading page"></div>
+}
+
 <main class="flex-1 overflow-auto">
   <router-outlet></router-outlet>
 </main>
