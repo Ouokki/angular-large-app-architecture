@@ -42,9 +42,9 @@
               "maximumError": "8kb"
             },
             {
-              "type": "lazy",
+              "type": "anyScript",
               "maximumWarning": "150kb",
-              "maximumError": "300kb"
+              "maximumError": "700kb"
             }
           ],
           "outputHashing": "all",
