@@ -1,0 +1,38 @@
+<div class="flex flex-col gap-1">
+  @if (label()) {
+  <label
+    [for]="id()"
+    class="text-sm font-medium"
+    [class.text-neutral-700]="!hasError"
+    [class.text-danger-500]="hasError"
+  >
+    {{ label() }}
+  </label>
+  }
+  <input
+    [id]="id()"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [formControl]="internalControl"
+    (blur)="onBlur()"
+    class="block w-full rounded border px-3 py-2 text-base text-neutral-900 placeholder-neutral-400 outline-none transition-colors focus:ring-2 focus:ring-offset-0"
+    [class.border-neutral-300]="!hasError"
+    [class.focus:border-primary-500]="!hasError"
+    [class.focus:ring-primary-300]="!hasError"
+    [class.border-danger-500]="hasError"
+    [class.focus:ring-danger-300]="hasError"
+    [class.bg-neutral-100]="isDisabled()"
+    [class.cursor-not-allowed]="isDisabled()"
+    [attr.aria-invalid]="hasError || null"
+    [attr.aria-describedby]="errorMessage || hint() ? id() + '-desc' : null"
+  />
+  @if (errorMessage) {
+  <span [id]="id() + '-desc'" class="text-sm text-danger-500" role="alert">
+    {{ errorMessage }}
+  </span>
+  } @else if (hint()) {
+  <span [id]="id() + '-desc'" class="text-sm text-neutral-500">
+    {{ hint() }}
+  </span>
+  }
+</div>

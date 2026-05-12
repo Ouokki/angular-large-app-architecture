@@ -57,6 +57,9 @@
       "standalone": true,
       "style": "scss",
       "changeDetection": "OnPush"
+    },
+    "@nx/angular:component": {
+      "style": "scss"
     }
   }
 }
