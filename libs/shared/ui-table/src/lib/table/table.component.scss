@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.table-wrapper {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+cdk-virtual-scroll-viewport {
+  overflow-x: auto;
+}

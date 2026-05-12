@@ -1,0 +1,64 @@
+<div class="table-wrapper" role="region" [attr.aria-label]="ariaLabel()">
+  <table class="w-full border-collapse text-sm">
+    <thead class="sticky top-0 z-10 bg-[var(--color-surface)] shadow-sm">
+      <tr>
+        @for (col of columns(); track col.key) {
+        <th
+          class="px-4 py-3 text-left font-semibold text-[var(--color-text-secondary)] select-none"
+          [style.width]="col.width ?? 'auto'"
+          [attr.aria-sort]="
+            sortState().column === col.key
+              ? sortState().direction === 'asc'
+                ? 'ascending'
+                : 'descending'
+              : 'none'
+          "
+        >
+          @if (col.sortable) {
+          <button
+            class="flex items-center gap-1 hover:text-[var(--color-text)] transition-colors"
+            type="button"
+            (click)="onSort(col.key, col.sortable)"
+          >
+            {{ col.header }}
+            <span class="text-xs opacity-60" aria-hidden="true">{{ getSortIcon(col.key) }}</span>
+          </button>
+          } @else {
+          {{ col.header }}
+          }
+        </th>
+        }
+      </tr>
+    </thead>
+  </table>
+
+  <cdk-virtual-scroll-viewport
+    [itemSize]="rowHeight()"
+    [style.height]="tableHeight()"
+    class="w-full"
+  >
+    <table class="w-full border-collapse text-sm">
+      <tbody>
+        <tr
+          *cdkVirtualFor="let row of sortedData(); trackBy: trackByIndex"
+          class="border-b border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] cursor-pointer transition-colors"
+          [style.height.px]="rowHeight()"
+          (click)="onRowClick(row)"
+          (keydown.enter)="onRowClick(row)"
+          tabindex="0"
+          role="row"
+        >
+          @for (col of columns(); track col.key) {
+          <td class="px-4 py-3 text-[var(--color-text)]" role="cell">
+            {{ getCellValue(row, col.key) }}
+          </td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  </cdk-virtual-scroll-viewport>
+
+  @if (sortedData().length === 0) {
+  <div class="py-12 text-center text-[var(--color-text-secondary)]">No results found.</div>
+  }
+</div>

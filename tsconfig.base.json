@@ -19,7 +19,8 @@
       "@angular-large-app/shared/ui-button/ui-button": [
         "libs/shared/ui-button/ui-button/src/index.ts"
       ],
-      "@angular-large-app/shared/ui-input": ["libs/shared/ui-input/src/index.ts"]
+      "@angular-large-app/shared/ui-input": ["libs/shared/ui-input/src/index.ts"],
+      "@angular-large-app/shared/ui-table": ["libs/shared/ui-table/src/index.ts"]
     },
     "strict": true,
     "noImplicitAny": true,
