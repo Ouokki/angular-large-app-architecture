@@ -28,7 +28,8 @@
       "@angular-large-app/dashboard/feat-dashboard": ["libs/dashboard/feat-dashboard/src/index.ts"],
       "@angular-large-app/settings/data-access-settings": [
         "libs/settings/data-access-settings/src/index.ts"
-      ]
+      ],
+      "@angular-large-app/settings/feat-settings": ["libs/settings/feat-settings/src/index.ts"]
     },
     "strict": true,
     "noImplicitAny": true,

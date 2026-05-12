@@ -1,0 +1,82 @@
+<main class="settings-page">
+  <header class="settings-header">
+    <h1 class="text-2xl font-bold text-[var(--color-text)]">Settings</h1>
+    @if (dirty$ | async) {
+    <span class="dirty-badge" aria-live="polite">Unsaved changes</span>
+    }
+  </header>
+
+  @if (loading$ | async) {
+  <div role="status" aria-live="polite" class="py-8 text-center text-[var(--color-text-secondary)]">
+    Loading settings…
+  </div>
+  } @if (error$ | async; as err) {
+  <div role="alert" class="error-banner">{{ err }}</div>
+  }
+
+  <form [formGroup]="form" class="settings-form" aria-label="User settings form" novalidate>
+    <fieldset class="settings-section">
+      <legend class="section-title">Appearance</legend>
+
+      <div class="form-field">
+        <label class="field-label" for="theme">Theme</label>
+        <select id="theme" formControlName="theme" class="field-input">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="field-label" for="compact-mode">
+          <input id="compact-mode" type="checkbox" formControlName="compactMode" class="mr-2" />
+          Compact mode
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="settings-section">
+      <legend class="section-title">Localisation</legend>
+
+      <div class="form-field">
+        <label class="field-label" for="language">Language</label>
+        <select id="language" formControlName="language" class="field-input">
+          <option value="en">English</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+          <option value="es">Spanish</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="field-label" for="timezone">Timezone</label>
+        <select id="timezone" formControlName="timezone" class="field-input">
+          <option value="UTC">UTC</option>
+          <option value="Europe/Paris">Europe/Paris</option>
+          <option value="America/New_York">America/New_York</option>
+          <option value="Asia/Tokyo">Asia/Tokyo</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset class="settings-section">
+      <legend class="section-title">Notifications</legend>
+
+      <div class="form-field">
+        <label class="field-label" for="notifications">
+          <input
+            id="notifications"
+            type="checkbox"
+            formControlName="notificationsEnabled"
+            class="mr-2"
+          />
+          Enable notifications
+        </label>
+      </div>
+    </fieldset>
+
+    <footer class="settings-footer">
+      <button type="button" class="btn btn-ghost" (click)="onReset()">Reset to defaults</button>
+    </footer>
+  </form>
+</main>
