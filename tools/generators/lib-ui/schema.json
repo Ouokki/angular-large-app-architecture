@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "lib-ui",
+  "title": "UI Library Generator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Component name (e.g. button, input, modal)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Component name (without the ui- prefix):"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Scope tag",
+      "enum": ["shell", "dashboard", "settings", "auth", "shared"],
+      "default": "shared",
+      "x-prompt": "Scope (default: shared):"
+    }
+  },
+  "required": ["name"]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/packages/nx/schemas/generators-schema.json",
+  "name": "@angular-large-app/generators",
+  "version": "0.0.1",
+  "generators": {
+    "lib-feat": {
+      "factory": "./lib-feat/index",
+      "schema": "./lib-feat/schema.json",
+      "description": "Generate a feature library with the correct Nx tags and folder structure"
+    },
+    "lib-ui": {
+      "factory": "./lib-ui/index",
+      "schema": "./lib-ui/schema.json",
+      "description": "Generate a UI library with Storybook story scaffold"
+    },
+    "lib-data-access": {
+      "factory": "./lib-data-access/index",
+      "schema": "./lib-data-access/schema.json",
+      "description": "Generate a data-access library with optional NgRx store scaffold"
+    }
+  }
+}

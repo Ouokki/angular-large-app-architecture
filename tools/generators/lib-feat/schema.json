@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "lib-feat",
+  "title": "Feature Library Generator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name (e.g. dashboard, settings)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Library name (without the feat- prefix):"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Feature scope tag",
+      "enum": ["dashboard", "settings", "auth", "shared"],
+      "x-prompt": "Feature scope:"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory within libs/ (defaults to scope/feat-name)"
+    }
+  },
+  "required": ["name", "scope"]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "lib-data-access",
+  "title": "Data-Access Library Generator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name (e.g. metrics, settings, auth)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Library name (without the data-access- prefix):"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Feature scope tag",
+      "enum": ["dashboard", "settings", "auth", "shared"],
+      "x-prompt": "Feature scope:"
+    },
+    "withNgrx": {
+      "type": "boolean",
+      "description": "Scaffold NgRx store, actions, reducer, selectors, and effects",
+      "default": false,
+      "x-prompt": "Scaffold NgRx store? (y/N):"
+    }
+  },
+  "required": ["name", "scope"]
+}
