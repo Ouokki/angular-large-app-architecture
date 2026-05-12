@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+.metric-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.metric-trend {
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.trend-up {
+    color: #22c55e;
+  }
+
+  &.trend-down {
+    color: #ef4444;
+  }
+
+  &.trend-flat {
+    color: var(--color-text-secondary);
+  }
+}

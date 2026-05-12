@@ -1,0 +1,46 @@
+<main class="dashboard-page">
+  <header class="dashboard-header">
+    <h1 class="text-2xl font-bold text-[var(--color-text)]">Dashboard</h1>
+    <p class="text-sm text-[var(--color-text-secondary)]">
+      {{ activity().length | number }} activity events
+    </p>
+  </header>
+
+  @if (loading()) {
+  <div class="loading-state" role="status" aria-live="polite">
+    <span class="sr-only">Loading metrics…</span>
+    <div class="spinner" aria-hidden="true"></div>
+  </div>
+  } @if (error()) {
+  <div class="error-banner" role="alert">
+    <p>Failed to load metrics: {{ error() }}</p>
+  </div>
+  } @if (!loading() && !error()) {
+  <section class="metrics-grid" aria-label="Key metrics">
+    @for (card of cards(); track card.id) {
+    <app-metric-card [card]="card" />
+    }
+  </section>
+
+  <section class="activity-section" aria-label="Activity log">
+    <div class="activity-header">
+      <h2 class="text-lg font-semibold text-[var(--color-text)]">Activity Log</h2>
+      <input
+        class="filter-input"
+        type="search"
+        placeholder="Filter activity…"
+        aria-label="Filter activity rows"
+        (input)="onFilter($event)"
+      />
+    </div>
+
+    <app-ui-table
+      [columns]="columns"
+      [data]="activityAsRows"
+      [filterText]="filterText()"
+      [visibleRows]="15"
+      ariaLabel="Activity log table"
+    />
+  </section>
+  }
+</main>

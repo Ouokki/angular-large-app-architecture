@@ -1,0 +1,8 @@
+<div class="metric-card" role="region" [attr.aria-label]="card().label">
+  <p class="metric-label">{{ card().label }}</p>
+  <p class="metric-value">{{ formattedValue }}</p>
+  <p class="metric-trend" [class]="trendClass" aria-live="polite">
+    <span aria-hidden="true">{{ trendIcon }}</span>
+    {{ card().trend | number : '1.1-1' }}%
+  </p>
+</div>
