@@ -5,6 +5,15 @@
   "prefix": "app",
   "sourceRoot": "apps/shell/src",
   "tags": ["scope:shell", "type:feat"],
+  "i18n": {
+    "sourceLocale": "en-US",
+    "locales": {
+      "fr": {
+        "translation": "apps/shell/src/locale/messages.fr.xlf",
+        "baseHref": "/fr/"
+      }
+    }
+  },
   "targets": {
     "build": {
       "executor": "@nx/angular:webpack-browser",
@@ -13,7 +22,7 @@
         "outputPath": "dist/apps/shell",
         "index": "apps/shell/src/index.html",
         "main": "apps/shell/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": ["zone.js", "apps/shell/src/polyfills.ts"],
         "tsConfig": "apps/shell/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

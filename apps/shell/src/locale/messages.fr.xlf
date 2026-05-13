@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" target-language="fr" datatype="plaintext" original="ng2.template">
+    <body>
+
+      <!-- Auth / Login -->
+      <trans-unit id="login.title" datatype="html">
+        <source>Sign in</source>
+        <target>Se connecter</target>
+        <note priority="1" from="description">Login page heading</note>
+      </trans-unit>
+
+      <trans-unit id="login.subtitle" datatype="html">
+        <source>Use any non-empty username and password. This is a local mock auth session.</source>
+        <target>Utilisez n'importe quel identifiant et mot de passe. Il s'agit d'une session d'authentification simulée en local.</target>
+      </trans-unit>
+
+      <trans-unit id="login.username" datatype="html">
+        <source>Email or username</source>
+        <target>E-mail ou nom d'utilisateur</target>
+      </trans-unit>
+
+      <trans-unit id="login.password" datatype="html">
+        <source>Password</source>
+        <target>Mot de passe</target>
+      </trans-unit>
+
+      <trans-unit id="login.submit" datatype="html">
+        <source>Sign in</source>
+        <target>Se connecter</target>
+      </trans-unit>
+
+      <!-- Navigation -->
+      <trans-unit id="nav.dashboard" datatype="html">
+        <source>Dashboard</source>
+        <target>Tableau de bord</target>
+      </trans-unit>
+
+      <trans-unit id="nav.settings" datatype="html">
+        <source>Settings</source>
+        <target>Paramètres</target>
+      </trans-unit>
+
+      <trans-unit id="nav.widgets" datatype="html">
+        <source>Widgets</source>
+        <target>Widgets</target>
+      </trans-unit>
+
+      <!-- Settings page -->
+      <trans-unit id="settings.title" datatype="html">
+        <source>Account settings</source>
+        <target>Paramètres du compte</target>
+      </trans-unit>
+
+      <trans-unit id="settings.save" datatype="html">
+        <source>Save settings</source>
+        <target>Enregistrer les paramètres</target>
+      </trans-unit>
+
+      <trans-unit id="settings.saving" datatype="html">
+        <source>Saving…</source>
+        <target>Enregistrement…</target>
+      </trans-unit>
+
+      <trans-unit id="settings.saved" datatype="html">
+        <source>Saved</source>
+        <target>Enregistré</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>
