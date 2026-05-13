@@ -1,0 +1,22 @@
+[
+  {
+    "name": "ui-button",
+    "path": "libs/shared/ui-button/src/index.ts",
+    "limit": "10 kB"
+  },
+  {
+    "name": "ui-input",
+    "path": "libs/shared/ui-input/src/index.ts",
+    "limit": "15 kB"
+  },
+  {
+    "name": "ui-modal",
+    "path": "libs/shared/ui-modal/src/index.ts",
+    "limit": "15 kB"
+  },
+  {
+    "name": "ui-table",
+    "path": "libs/shared/ui-table/src/index.ts",
+    "limit": "20 kB"
+  }
+]
