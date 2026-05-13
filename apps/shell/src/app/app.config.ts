@@ -1,4 +1,10 @@
-import { ApplicationConfig, ErrorHandler, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  ErrorHandler,
+  isDevMode,
+  provideZoneChangeDetection,
+} from '@angular/core';
+import { provideServiceWorker } from '@angular/service-worker';
 import { GlobalErrorHandler } from './error-handler/global-error-handler';
 import {
   provideRouter,
@@ -37,5 +43,9 @@ export const appConfig: ApplicationConfig = {
     provideEffects([SettingsEffects]),
     provideStoreDevtools({ maxAge: 25 }),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };
