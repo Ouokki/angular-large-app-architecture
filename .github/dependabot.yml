@@ -1,0 +1,48 @@
+version: 2
+
+updates:
+  # npm / pnpm — Angular, Nx, NgRx, and all JS tooling
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '08:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    groups:
+      angular:
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+          - '@angular-eslint/*'
+      nx:
+        patterns:
+          - 'nx'
+          - '@nx/*'
+      ngrx:
+        patterns:
+          - '@ngrx/*'
+      storybook:
+        patterns:
+          - '@storybook/*'
+          - 'storybook'
+    ignore:
+      # Major Angular / Nx upgrades require manual migration steps
+      - dependency-name: '@angular/*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'nx'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@nx/*'
+        update-types: ['version-update:semver-major']
+    labels:
+      - dependencies
+
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - ci
