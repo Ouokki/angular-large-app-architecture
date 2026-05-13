@@ -1,7 +1,16 @@
 {
   "name": "@angular-large-app/source",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Reference Angular 18 + Nx 19 monorepo — battle-tested patterns for 100k+ LOC codebases",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ouokki/angular-large-app-architecture.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ouokki/angular-large-app-architecture/issues"
+  },
+  "homepage": "https://github.com/Ouokki/angular-large-app-architecture#readme",
   "scripts": {
     "prepare": "husky"
   },
