@@ -217,6 +217,19 @@ jobs:
           path: dist/apps/remote-widgets
           retention-days: 7
 
+      - name: Analyse bundle size
+        run: |
+          pnpm exec source-map-explorer 'dist/apps/shell/browser/*.js' \
+            --html dist/apps/shell/bundle-report.html \
+            --no-border-checks
+
+      - name: Upload bundle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-report
+          path: dist/apps/shell/bundle-report.html
+          retention-days: 30
+
       # Vercel deployment
       # Prerequisites:
       #   1. Install Vercel CLI: pnpm add -D vercel
