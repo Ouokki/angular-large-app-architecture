@@ -84,6 +84,22 @@
       "style": "scss"
     }
   },
+  "release": {
+    "projects": ["shell", "remote-widgets"],
+    "version": {
+      "conventionalCommits": true
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github",
+        "file": "CHANGELOG.md"
+      }
+    },
+    "git": {
+      "commitMessage": "chore(release): {version}",
+      "tagPattern": "v{version}"
+    }
+  },
   "plugins": [
     {
       "plugin": "@nx/cypress/plugin",

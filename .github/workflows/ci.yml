@@ -192,6 +192,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Version and changelog (nx release)
+        run: pnpm exec nx release --skip-publish --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build shell for production
         run: pnpm exec nx build shell --configuration=production
 
