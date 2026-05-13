@@ -1,0 +1,39 @@
+{
+  "name": "Angular Large App Architecture",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "nodeGypDependencies": false
+    }
+  },
+
+  "onCreateCommand": "npm install -g pnpm@10 && pnpm install",
+
+  "forwardPorts": [4200, 4201],
+  "portsAttributes": {
+    "4200": { "label": "Shell (host)", "onAutoForward": "openBrowser" },
+    "4201": { "label": "Remote widgets", "onAutoForward": "notify" }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "nrwl.angular-console",
+        "firsttris.vscode-jest-runner",
+        "EditorConfig.EditorConfig"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  },
+
+  "postCreateMessage": "Run 'pnpm exec nx serve shell' in Terminal 2 and 'pnpm exec nx serve remote-widgets' in Terminal 1 to start the full stack."
+}
