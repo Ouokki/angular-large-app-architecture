@@ -1,9 +1,12 @@
 import { computed, Injectable, signal } from '@angular/core';
 
+export type AppRole = 'admin' | 'editor' | 'viewer';
+
 interface MockAuthSession {
   readonly issuedAt: string;
   readonly token: string;
   readonly username: string;
+  readonly roles: AppRole[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,16 +17,22 @@ export class AuthService {
   readonly authenticated = computed(() => this.session() !== null);
   readonly username = computed(() => this.session()?.username ?? 'Guest');
   readonly token = computed(() => this.session()?.token ?? null);
+  readonly roles = computed(() => this.session()?.roles ?? []);
+
+  hasRole(role: AppRole): boolean {
+    return this.roles().includes(role);
+  }
 
   isAuthenticated(): boolean {
     return this.authenticated();
   }
 
-  login(username: string, password: string): void {
+  login(username: string, password: string, roles: AppRole[] = ['viewer']): void {
     const session: MockAuthSession = {
       issuedAt: new Date().toISOString(),
       token: this.createMockToken(username, password),
       username,
+      roles,
     };
 
     this.session.set(session);
@@ -57,6 +66,7 @@ export class AuthService {
         issuedAt: parsed.issuedAt,
         token: parsed.token,
         username: parsed.username,
+        roles: (parsed.roles ?? ['viewer']) as AppRole[],
       };
     } catch {
       return null;
