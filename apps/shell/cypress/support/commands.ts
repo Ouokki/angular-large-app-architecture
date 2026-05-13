@@ -1,3 +1,2 @@
 /// <reference types="cypress" />
-
-// No custom commands needed for this test suite.
+/// <reference types="cypress-axe" />

@@ -180,9 +180,15 @@ importers:
       autoprefixer:
         specifier: ^10.5.0
         version: 10.5.0(postcss@8.5.14)
+      axe-core:
+        specifier: ^4.11.4
+        version: 4.11.4
       cypress:
         specifier: ^13.13.0
         version: 13.17.0
+      cypress-axe:
+        specifier: ^1.7.0
+        version: 1.7.0(axe-core@4.11.4)(cypress@13.17.0)
       eslint:
         specifier: ^9.8.0
         version: 9.39.4(jiti@1.21.7)
@@ -3951,6 +3957,10 @@ packages:
   aws4@1.13.2:
     resolution: {integrity: sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==}
 
+  axe-core@4.11.4:
+    resolution: {integrity: sha512-KunSNx+TVpkAw/6ULfhnx+HWRecjqZGTOyquAoWHYLRSdK1tB5Ihce1ZW+UY3fj33bYAFWPu7W/GRSmmrCGuxA==}
+    engines: {node: '>=4'}
+
   axios@0.21.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
 
@@ -4696,6 +4706,13 @@ packages:
   cwd@0.10.0:
     resolution: {integrity: sha512-YGZxdTTL9lmLkCUTpg4j0zQ7IhRB5ZmqNBbGCl3Tg6MP/d5/6sY7L5mmTjzbc6JKgVZYiqTQTNhPFsbXNGlRaA==}
     engines: {node: '>=0.8'}
+
+  cypress-axe@1.7.0:
+    resolution: {integrity: sha512-zzJpvAAjauEB3GZl0KYXb8i3w6MztWAt2WM3czYTFyNVC30alDmqCm9E7GwZ4bgkldZJlmHakaVEyu73R5St4w==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      axe-core: ^3 || ^4
+      cypress: ^10 || ^11 || ^12 || ^13 || ^14 || ^15
 
   cypress@13.17.0:
     resolution: {integrity: sha512-5xWkaPurwkIljojFidhw8lFScyxhtiFHl/i/3zov+1Z5CmY4t9tjIdvSXfu82Y3w7wt0uR9KkucbhkVvJZLQSA==}
@@ -15057,6 +15074,8 @@ snapshots:
 
   aws4@1.13.2: {}
 
+  axe-core@4.11.4: {}
+
   axios@0.21.4:
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3)
@@ -15922,6 +15941,11 @@ snapshots:
     dependencies:
       find-pkg: 0.1.2
       fs-exists-sync: 0.1.0
+
+  cypress-axe@1.7.0(axe-core@4.11.4)(cypress@13.17.0):
+    dependencies:
+      axe-core: 4.11.4
+      cypress: 13.17.0
 
   cypress@13.17.0:
     dependencies:
