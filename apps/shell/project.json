@@ -56,7 +56,8 @@
               "maximumError": "700kb"
             }
           ],
-          "serviceWorker": "apps/shell/ngsw-config.json",
+          "serviceWorker": true,
+          "ngswConfigPath": "apps/shell/ngsw-config.json",
           "outputHashing": "all",
           "optimization": {
             "scripts": true,
