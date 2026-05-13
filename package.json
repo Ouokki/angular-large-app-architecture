@@ -46,7 +46,7 @@
     "@angular/compiler-cli": "~18.2.0",
     "@angular/language-service": "~18.2.0",
     "@commitlint/cli": "^21.0.0",
-    "@commitlint/config-conventional": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^9.8.0",
     "@module-federation/enhanced": "~0.6.0",
     "@ngneat/spectator": "^17.1.0",
