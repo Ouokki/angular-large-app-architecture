@@ -197,6 +197,8 @@ jobs:
     needs: [main, e2e]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
     steps:
       - name: Checkout
@@ -257,38 +259,25 @@ jobs:
           retention-days: 30
 
       # Vercel deployment
-      # Prerequisites:
-      #   1. Install Vercel CLI: pnpm add -D vercel
-      #   2. Create Vercel projects for shell and remote-widgets
-      #   3. Add these secrets to the repository:
-      #      - VERCEL_TOKEN       (from vercel.com/account/tokens)
-      #      - VERCEL_ORG_ID      (from vercel.com/account → Settings → General)
-      #      - VERCEL_SHELL_PROJECT_ID      (from shell project settings on Vercel)
-      #      - VERCEL_REMOTE_WIDGETS_PROJECT_ID
-      #
-      # Uncomment the steps below once the secrets are configured.
+      # Add VERCEL_TOKEN (vercel.com/account/tokens) as a GitHub secret to enable.
+      # Project IDs are hardcoded — org ID is fixed per account.
 
-      # - name: Deploy remote-widgets to Vercel
-      #   run: |
-      #     pnpm exec vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      #     pnpm exec vercel build dist/apps/remote-widgets --prod --token=${{ secrets.VERCEL_TOKEN }}
-      #     pnpm exec vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-      #   working-directory: apps/remote-widgets
-      #   env:
-      #     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_REMOTE_WIDGETS_PROJECT_ID }}
+      - name: Deploy remote-widgets to Vercel
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          npx vercel deploy --prod --yes \
+            --local-config apps/remote-widgets/vercel.json \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: team_BO3mj0mrY7D3V9n0D9TIc3Sj
+          VERCEL_PROJECT_ID: prj_xcwvC0ZbBalSVlB7jVyclJQSGSvn
 
-      # - name: Update shell federation manifest with remote URL
-      #   run: |
-      #     REMOTE_URL=$(cat .vercel/output/static/.vercel/output-metadata.json | jq -r '.deploymentUrl')
-      #     echo "{\"remote-widgets\": \"https://${REMOTE_URL}\"}" > dist/apps/shell/browser/module-federation.manifest.json
-
-      # - name: Deploy shell to Vercel
-      #   run: |
-      #     pnpm exec vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      #     pnpm exec vercel build dist/apps/shell/browser --prod --token=${{ secrets.VERCEL_TOKEN }}
-      #     pnpm exec vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-      #   working-directory: apps/shell
-      #   env:
-      #     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SHELL_PROJECT_ID }}
+      - name: Deploy shell to Vercel
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          npx vercel deploy --prod --yes \
+            --local-config apps/shell/vercel.json \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: team_BO3mj0mrY7D3V9n0D9TIc3Sj
+          VERCEL_PROJECT_ID: prj_gVnaOKUdNPH5bxt70u22g43SoWMf
