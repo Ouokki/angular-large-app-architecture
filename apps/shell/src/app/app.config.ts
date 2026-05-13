@@ -5,7 +5,7 @@ import {
   withPreloading,
   withViewTransitions,
 } from '@angular/router';
-import { SelectivePreloadStrategy } from './preloading/selective-preload.strategy';
+import { ConnectionAwarePreloadingStrategy } from './preloading/connection-aware-preload.strategy';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
       appRoutes,
       withComponentInputBinding(),
       withViewTransitions(),
-      withPreloading(SelectivePreloadStrategy),
+      withPreloading(ConnectionAwarePreloadingStrategy),
     ),
     provideAnimations(),
     provideHttpClient(),

@@ -13,7 +13,7 @@ describe('RemoteErrorComponent', () => {
     const fixture = TestBed.createComponent(RemoteErrorComponent);
     fixture.detectChanges();
     const h2 = (fixture.nativeElement as HTMLElement).querySelector('h2');
-    expect(h2?.textContent?.trim()).toBe('Remote unavailable');
+    expect(h2?.textContent?.trim()).toBe('Widget catalog could not be loaded');
   });
 
   it('renders a link back to dashboard', () => {
