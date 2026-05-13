@@ -7,7 +7,7 @@
 [![CI](https://github.com/Ouokki/angular-large-app-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/Ouokki/angular-large-app-architecture/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-**[Live Demo](#)** · **[Storybook](#)** · **[Architecture Docs](./docs/)**
+**[Architecture Docs](./docs/)**
 
 ---
 
@@ -139,6 +139,6 @@ I'm **Ouokki**, Tech Lead Java/Angular with 5+ years shipping critical applicati
 
 Available for Angular freelance missions — architecture audits, performance refactors, team coaching, hands-on Tech Lead roles. Through portage salarial.
 
-→ **Malt**: [https://www.malt.fr/profile/[your-slug]](https://www.malt.fr/profile/)  
-→ **LinkedIn**: [https://www.linkedin.com/in/[your-handle]](https://www.linkedin.com/in/)  
-→ **Blog**: [https://[your-handle].hashnode.dev](https://hashnode.dev)
+→ **GitHub**: [github.com/Ouokki](https://github.com/Ouokki)  
+→ **Malt**: coming soon  
+→ **LinkedIn**: coming soon
