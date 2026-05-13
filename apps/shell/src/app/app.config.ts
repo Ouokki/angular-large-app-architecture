@@ -7,7 +7,10 @@ import {
   withViewTransitions,
 } from '@angular/router';
 import { ConnectionAwarePreloadingStrategy } from './preloading/connection-aware-preload.strategy';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth.interceptor';
+import { errorInterceptor } from './interceptors/error.interceptor';
+import { retryInterceptor } from './interceptors/retry.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
@@ -29,7 +32,7 @@ export const appConfig: ApplicationConfig = {
       withPreloading(ConnectionAwarePreloadingStrategy),
     ),
     provideAnimations(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor, retryInterceptor])),
     provideStore({ [SETTINGS_FEATURE_KEY]: settingsReducer }),
     provideEffects([SettingsEffects]),
     provideStoreDevtools({ maxAge: 25 }),

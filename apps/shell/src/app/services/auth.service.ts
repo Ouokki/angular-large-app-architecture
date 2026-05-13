@@ -13,6 +13,7 @@ export class AuthService {
 
   readonly authenticated = computed(() => this.session() !== null);
   readonly username = computed(() => this.session()?.username ?? 'Guest');
+  readonly token = computed(() => this.session()?.token ?? null);
 
   isAuthenticated(): boolean {
     return this.authenticated();
