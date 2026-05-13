@@ -81,7 +81,7 @@ jobs:
         run: npx serve dist/apps/remote-widgets --listen 4201 &
 
       - name: Run Cypress against shell (serve-static)
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           install: false
           command: pnpm exec nx e2e shell --configuration=ci --no-cache
