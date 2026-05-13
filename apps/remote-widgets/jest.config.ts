@@ -3,6 +3,9 @@ export default {
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/apps/remote-widgets',
+  coverageThreshold: {
+    global: { lines: 70, statements: 70, functions: 70, branches: 60 },
+  },
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
