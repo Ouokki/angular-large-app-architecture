@@ -79,14 +79,11 @@ cd angular-large-app-architecture
 # 2. Install
 pnpm install
 
-# 3. Start the remote (Terminal 1)
-pnpm exec nx serve remote-widgets
-
-# 4. Start the shell (Terminal 2)
+# 3. Start the local stack
 pnpm exec nx serve shell
 ```
 
-Open [http://localhost:4200](http://localhost:4200). Login with any credentials (mock auth).
+Open [http://localhost:4200](http://localhost:4200). Login with any non-empty username and password (mock auth).
 
 ---
 

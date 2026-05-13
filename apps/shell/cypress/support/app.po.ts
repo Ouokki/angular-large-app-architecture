@@ -1,3 +1,9 @@
+export const auth = {
+  password: () => cy.get('input[formcontrolname="password"]'),
+  submit: () => cy.get('button[type="submit"]').contains('Sign in'),
+  username: () => cy.get('input[formcontrolname="username"]'),
+};
+
 export const nav = {
   links: () => cy.get('nav a'),
   toDashboard: () => cy.get('nav a[href="/dashboard"]').click(),

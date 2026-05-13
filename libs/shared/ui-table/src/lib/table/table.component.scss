@@ -1,25 +1,48 @@
 :host {
+  --table-accent: #0f766e;
+  --table-border: #dbe3ec;
+  --table-header-bg: #f8fafc;
+  --table-hover-bg: #f8fafc;
+  --table-muted: #64748b;
+  --table-row-bg: #fff;
+  --table-surface: #fff;
+  --table-text: #0f172a;
   display: block;
 }
 
+:host-context(body[data-theme='dark']),
+:host-context(html[data-theme='dark']) {
+  --table-accent: #2dd4bf;
+  --table-border: #3e4652;
+  --table-header-bg: #171a1f;
+  --table-hover-bg: #252a31;
+  --table-muted: #b5bfca;
+  --table-row-bg: #202329;
+  --table-surface: #202329;
+  --table-text: #f8fafc;
+}
+
 .table-wrapper {
-  background: #fff;
-  border: 1px solid #dbe3ec;
+  background: var(--table-surface);
+  border: 1px solid var(--table-border);
   border-radius: 0.6rem;
+  box-shadow: 0 14px 34px rgb(15 23 42 / 0.06);
+  color: var(--table-text);
   overflow: hidden;
 }
 
 cdk-virtual-scroll-viewport {
+  background: var(--table-surface);
   overflow-x: auto;
 }
 
 thead {
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--table-header-bg);
+  border-bottom: 1px solid var(--table-border);
 }
 
 th {
-  color: #64748b;
+  color: var(--table-muted);
   font-size: 0.72rem;
   font-weight: 850;
   letter-spacing: 0;
@@ -27,16 +50,26 @@ th {
 }
 
 td {
-  color: #0f172a;
+  color: var(--table-text);
   font-weight: 500;
 }
 
 tbody tr {
-  background: #fff;
+  background: var(--table-row-bg);
+  border-color: var(--table-border);
   transition: background-color 140ms ease, box-shadow 140ms ease;
 }
 
 tbody tr:hover {
-  background: #f8fafc;
-  box-shadow: inset 3px 0 0 #14b8a6;
+  background: var(--table-hover-bg);
+  box-shadow: inset 3px 0 0 var(--table-accent);
+}
+
+th button {
+  color: inherit;
+}
+
+.empty-state {
+  background: var(--table-surface);
+  color: var(--table-muted);
 }

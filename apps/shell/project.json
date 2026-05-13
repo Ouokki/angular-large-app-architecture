@@ -65,20 +65,60 @@
       },
       "defaultConfiguration": "production"
     },
-    "serve": {
-      "executor": "@nx/angular:module-federation-dev-server",
+    "serve-host": {
+      "executor": "@nx/angular:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "shell:build:production"
         },
         "development": {
-          "buildTarget": "shell:build:development",
-          "devRemotes": ["remote-widgets"]
+          "buildTarget": "shell:build:development"
         }
       },
       "defaultConfiguration": "development",
       "options": {
+        "port": 4200,
         "publicHost": "http://localhost:4200"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "parallel": true,
+        "commands": [
+          {
+            "command": "pnpm exec nx run remote-widgets:serve:development",
+            "prefix": "remote-widgets",
+            "color": "cyan",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "pnpm exec nx run shell:serve-host:development",
+            "prefix": "shell",
+            "color": "green",
+            "forwardAllArgs": false
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "commands": [
+            {
+              "command": "pnpm exec nx run remote-widgets:serve:production",
+              "prefix": "remote-widgets",
+              "color": "cyan",
+              "forwardAllArgs": false
+            },
+            {
+              "command": "pnpm exec nx run shell:serve-host:production",
+              "prefix": "shell",
+              "color": "green",
+              "forwardAllArgs": false
+            }
+          ]
+        },
+        "development": {}
       }
     },
     "extract-i18n": {

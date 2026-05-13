@@ -22,6 +22,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         align-items: center;
       }
 
+      :host-context(body[data-theme='dark']) {
+        --mat-sys-outline-variant: #3e4652;
+        --skeleton-base: #2a3038;
+        --skeleton-highlight: #39414c;
+      }
+
       .skeleton-cell {
         height: 14px;
         border-radius: 4px;

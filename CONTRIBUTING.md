@@ -24,17 +24,14 @@ pnpm install
 
 ## Local Development
 
-This project uses Webpack Module Federation. You need two terminals:
+This project uses Webpack Module Federation. The shell serve target starts both
+the host and the remote widget app:
 
 ```bash
-# Terminal 1 — Remote application (port 4201)
-pnpm exec nx serve remote-widgets
-
-# Terminal 2 — Shell host (port 4200)
 pnpm exec nx serve shell
 ```
 
-Open [http://localhost:4200](http://localhost:4200). Login with any credentials (mock auth).
+Open [http://localhost:4200](http://localhost:4200). Login with any non-empty username and password (mock auth).
 
 ---
 

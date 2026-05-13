@@ -74,6 +74,24 @@ import { RouterLink } from '@angular/router';
         color: #0f766e;
         font-weight: 800;
       }
+
+      :host-context(body[data-theme='dark']) .remote-error-panel {
+        background: #202329;
+        border-color: #7f1d1d;
+        box-shadow: 0 18px 42px rgb(0 0 0 / 0.24);
+      }
+
+      :host-context(body[data-theme='dark']) h2 {
+        color: #f8fafc;
+      }
+
+      :host-context(body[data-theme='dark']) p {
+        color: #b5bfca;
+      }
+
+      :host-context(body[data-theme='dark']) code {
+        color: #2dd4bf;
+      }
     `,
   ],
 })

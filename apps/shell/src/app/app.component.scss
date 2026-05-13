@@ -165,6 +165,12 @@
   }
 }
 
+.workspace-actions {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
 .app-shell-content {
   min-height: calc(100vh - 82px);
 }

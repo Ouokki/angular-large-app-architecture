@@ -1,4 +1,4 @@
-import { dashboard, nav, settings } from '../support/app.po';
+import { auth, dashboard, nav, settings } from '../support/app.po';
 
 /**
  * Critical user flow: Dashboard → Settings → back to Dashboard.
@@ -12,6 +12,10 @@ describe('Critical user flow', () => {
   beforeEach(() => {
     cy.clearLocalStorage();
     cy.visit('/');
+    auth.username().type('demo@example.com');
+    auth.password().type('password');
+    auth.submit().click();
+    cy.url().should('include', '/dashboard');
   });
 
   it('redirects from / to /dashboard', () => {

@@ -349,6 +349,48 @@ const STATUS_CLASSES: Record<WidgetStatus, string> = {
         text-align: center;
       }
 
+      :host-context(body[data-theme='dark']) .catalog-page {
+        color: #f8fafc;
+      }
+
+      :host-context(body[data-theme='dark']) .filter-button.mat-mdc-button {
+        border-color: #3e4652;
+        color: #cbd5e1;
+      }
+
+      :host-context(body[data-theme='dark']) .filter-button.filter-active {
+        background: #2dd4bf;
+        color: #062f2c;
+      }
+
+      :host-context(body[data-theme='dark']) .widget-card.mat-mdc-card {
+        background: #202329;
+        border-color: #3e4652;
+        box-shadow: 0 18px 42px rgb(0 0 0 / 0.22);
+        color: #f8fafc;
+      }
+
+      :host-context(body[data-theme='dark']) h2,
+      :host-context(body[data-theme='dark']) footer strong {
+        color: #f8fafc;
+      }
+
+      :host-context(body[data-theme='dark']) .widget-description,
+      :host-context(body[data-theme='dark']) footer,
+      :host-context(body[data-theme='dark']) .empty-state {
+        color: #b5bfca;
+      }
+
+      :host-context(body[data-theme='dark']) code {
+        background: #15181d;
+        border-color: #3e4652;
+        color: #d6dee8;
+      }
+
+      :host-context(body[data-theme='dark']) footer {
+        border-top-color: #3e4652;
+      }
+
       @media (max-width: 720px) {
         .catalog-page {
           padding: 1rem;

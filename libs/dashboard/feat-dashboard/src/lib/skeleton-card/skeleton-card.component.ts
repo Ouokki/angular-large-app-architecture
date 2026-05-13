@@ -17,10 +17,18 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         padding: 1.5rem;
         border-radius: 0.75rem;
         border: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
+        background: var(--skeleton-card-bg, transparent);
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
         min-height: 120px;
+      }
+
+      :host-context(body[data-theme='dark']) {
+        --mat-sys-outline-variant: #3e4652;
+        --skeleton-base: #2a3038;
+        --skeleton-card-bg: #202329;
+        --skeleton-highlight: #39414c;
       }
 
       .skeleton-label,

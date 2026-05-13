@@ -27,9 +27,15 @@
         <p class="workspace-kicker">Architecture Console</p>
         <h1>Application workspace</h1>
       </div>
-      <div class="workspace-status" aria-label="Environment status">
-        <span>Local</span>
-        <strong>Healthy</strong>
+      <div class="workspace-actions">
+        <div class="workspace-status" aria-label="Authentication status">
+          <span>Mock auth</span>
+          <strong>{{ isAuthenticated() ? username() : 'Signed out' }}</strong>
+        </div>
+
+        @if (isAuthenticated()) {
+        <button mat-button type="button" (click)="logout()">Logout</button>
+        }
       </div>
     </header>
 

@@ -6,7 +6,11 @@
       <p>Configure your profile, appearance, and notification preferences.</p>
     </div>
 
-    @if (lastSaved()) {
+    @if (hasUnsavedChanges()) {
+    <span class="dirty-badge" role="status" aria-live="polite">Unsaved changes</span>
+    } @else if (saving()) {
+    <span class="saving-badge" role="status" aria-live="polite">Saving...</span>
+    } @else if (lastSaved()) {
     <span class="saved-badge" role="status" aria-live="polite">Saved</span>
     }
   </header>
@@ -24,12 +28,38 @@
     <aside class="settings-summary">
       <span class="summary-label">Profile</span>
       <strong>Workspace defaults</strong>
-      <p>
-        Stored via NgRx with optimistic update — changes apply instantly and roll back on error.
-      </p>
+      <p>Stored via NgRx with optimistic update. Changes apply instantly and roll back on error.</p>
+      <dl class="settings-preview" aria-label="Current settings preview">
+        <div>
+          <dt>Theme</dt>
+          <dd>{{ selectedTheme() }}</dd>
+        </div>
+        <div>
+          <dt>Language</dt>
+          <dd>{{ selectedLanguage() }}</dd>
+        </div>
+        <div>
+          <dt>Timezone</dt>
+          <dd>{{ selectedTimezone() }}</dd>
+        </div>
+        <div>
+          <dt>Local time</dt>
+          <dd>{{ timezonePreview() }}</dd>
+        </div>
+        <div>
+          <dt>Notifications</dt>
+          <dd>{{ enabledNotifications() }}</dd>
+        </div>
+      </dl>
     </aside>
 
-    <form [formGroup]="form" class="settings-form" aria-label="User settings form" novalidate>
+    <form
+      [formGroup]="form"
+      class="settings-form"
+      aria-label="User settings form"
+      novalidate
+      (ngSubmit)="onSave()"
+    >
       <section class="settings-section">
         <div class="section-heading">
           <h2>Profile</h2>
@@ -39,10 +69,19 @@
           <div class="control-group">
             <label for="display-name" class="control-label">Display name</label>
             <input id="display-name" type="text" formControlName="displayName" class="form-input" />
+            @if (form.controls.displayName.invalid && form.controls.displayName.touched) {
+            <p class="field-error">Display name is required.</p>
+            }
           </div>
           <div class="control-group">
             <label for="email" class="control-label">Email</label>
             <input id="email" type="email" formControlName="email" class="form-input" />
+            @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p class="field-error">
+              @if (form.controls.email.hasError('required')) { Email is required. } @else { Enter a
+              valid email address. }
+            </p>
+            }
           </div>
         </div>
       </section>
@@ -112,13 +151,19 @@
       </section>
 
       <footer class="settings-footer">
+        @if (form.invalid && hasUnsavedChanges()) {
+        <p class="footer-error" role="alert">Fix the highlighted fields before saving.</p>
+        }
         <button
           type="button"
-          class="btn btn-primary"
-          [disabled]="saving() || form.invalid"
-          (click)="onSave()"
+          class="btn btn-secondary"
+          [disabled]="saving() || !hasUnsavedChanges()"
+          (click)="onReset()"
         >
-          @if (saving()) { Saving… } @else { Save settings }
+          Reset
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving() || !hasUnsavedChanges()">
+          @if (saving()) { Saving... } @else { Save settings }
         </button>
       </footer>
     </form>

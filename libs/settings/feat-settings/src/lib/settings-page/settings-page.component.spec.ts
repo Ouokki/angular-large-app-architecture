@@ -1,18 +1,17 @@
+import { ReactiveFormsModule } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { SettingsPageComponent } from './settings-page.component';
 import {
   DEFAULT_SETTINGS,
-  loadSettings,
   saveSettings,
   selectError,
   selectLastSaved,
   selectLoading,
   selectSaving,
   selectSettings,
+  SETTINGS_FEATURE_KEY,
 } from '@angular-large-app/settings/data-access-settings';
-import { SETTINGS_FEATURE_KEY } from '@angular-large-app/settings/data-access-settings';
+import { SettingsPageComponent } from './settings-page.component';
 
 const storeState = {
   [SETTINGS_FEATURE_KEY]: {
@@ -47,64 +46,111 @@ describe('SettingsPageComponent', () => {
   });
 
   beforeEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+    document.body.removeAttribute('data-theme');
     spectator = createComponent();
     store = spectator.inject(MockStore);
   });
 
-  it('dispatches loadSettings on init', () => {
-    const dispatchSpy = jest.spyOn(store, 'dispatch');
-    spectator.component.ngOnInit();
-    expect(dispatchSpy).toHaveBeenCalledWith(loadSettings());
+  afterEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+    document.body.removeAttribute('data-theme');
   });
 
-  it('renders the settings form', () => {
+  it('renders the settings form fields', () => {
     expect(spectator.query('form')).toBeTruthy();
-  });
-
-  it('renders display name input', () => {
     expect(spectator.query('#display-name')).toBeTruthy();
-  });
-
-  it('renders email input', () => {
     expect(spectator.query('#email')).toBeTruthy();
-  });
-
-  it('renders theme select', () => {
     expect(spectator.query('#theme')).toBeTruthy();
-  });
-
-  it('renders language select', () => {
     expect(spectator.query('#language')).toBeTruthy();
-  });
-
-  it('renders timezone select', () => {
     expect(spectator.query('#timezone')).toBeTruthy();
-  });
-
-  it('renders notifications-email checkbox', () => {
     expect(spectator.query('#notifications-email')).toBeTruthy();
-  });
-
-  it('renders notifications-push checkbox', () => {
     expect(spectator.query('#notifications-push')).toBeTruthy();
+    expect(spectator.query('#notifications-sms')).toBeTruthy();
   });
 
-  it('renders notifications-sms checkbox', () => {
-    expect(spectator.query('#notifications-sms')).toBeTruthy();
+  it('shows unsaved changes when the form differs from stored settings', () => {
+    spectator.component.form.patchValue({ theme: 'dark' });
+    spectator.detectChanges();
+
+    expect(spectator.element.textContent).toContain('Unsaved changes');
   });
 
   it('dispatches saveSettings with form values when save button is clicked', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    spectator.component.form.patchValue(DEFAULT_SETTINGS);
+    spectator.component.form.patchValue({ theme: 'dark' });
     spectator.detectChanges();
-    const btn = spectator.query('button[type="button"]') as HTMLButtonElement;
-    btn?.click();
+
+    const btn = spectator.query('button[type="submit"]') as HTMLButtonElement;
+    btn.click();
+
     expect(dispatchSpy).toHaveBeenCalledWith(
       saveSettings({ settings: spectator.component.form.getRawValue() as typeof DEFAULT_SETTINGS }),
     );
   });
 
-  it('shows "Saving…" text when saving is true', () => {
+  it('shows validation errors instead of silently disabling save', () => {
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+    spectator.component.form.patchValue({ displayName: '' });
+    spectator.detectChanges();
+
+    const btn = spectator.query('button[type="submit"]') as HTMLButtonElement;
+    expect(btn.disabled).toBe(false);
+
+    btn.click();
+    spectator.detectChanges();
+
+    expect(dispatchSpy).not.toHaveBeenCalledWith(
+      expect.objectContaining({ type: '[Settings] Save' }),
+    );
+    expect(spectator.element.textContent).toContain('Display name is required.');
+    expect(spectator.element.textContent).toContain('Fix the highlighted fields before saving.');
+  });
+
+  it('resets unsaved changes to the stored settings', () => {
+    spectator.component.form.patchValue({ theme: 'dark' });
+    spectator.detectChanges();
+
+    const reset = spectator.query('.btn-secondary') as HTMLButtonElement;
+    reset.click();
+    spectator.detectChanges();
+
+    expect(spectator.component.form.getRawValue().theme).toBe(DEFAULT_SETTINGS.theme);
+    expect(spectator.element.textContent).not.toContain('Unsaved changes');
+  });
+
+  it('updates preview values when settings controls change', () => {
+    spectator.component.form.patchValue({
+      language: 'fr',
+      notifications: { email: true, push: false, sms: true },
+      timezone: 'Europe/Paris',
+    });
+    spectator.detectChanges();
+
+    expect(spectator.element.textContent).toContain('French');
+    expect(spectator.element.textContent).toContain('Europe/Paris');
+    expect(spectator.element.textContent).toContain('Email, SMS');
+  });
+
+  it('applies theme changes while editing settings', () => {
+    spectator.component.form.patchValue({ theme: 'dark' });
+    spectator.detectChanges();
+
+    expect(document.documentElement.dataset['theme']).toBe('dark');
+    expect(document.body.dataset['theme']).toBe('dark');
+  });
+
+  it('restores the saved theme when leaving with unsaved theme changes', () => {
+    spectator.component.form.patchValue({ theme: 'dark' });
+    spectator.detectChanges();
+
+    spectator.component.ngOnDestroy();
+
+    expect(document.documentElement.dataset['theme']).toBe(DEFAULT_SETTINGS.theme);
+    expect(document.body.dataset['theme']).toBe(DEFAULT_SETTINGS.theme);
+  });
+
+  it('shows saving text when saving is true', () => {
     store.overrideSelector(selectSaving, true);
     store.refreshState();
     spectator.detectChanges();
