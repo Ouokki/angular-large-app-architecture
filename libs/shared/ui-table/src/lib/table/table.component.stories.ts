@@ -5,7 +5,7 @@ const COLUMNS: TableColumn[] = [
   { key: 'id', header: '#', sortable: true, width: '60px' },
   { key: 'name', header: 'Name', sortable: true },
   { key: 'email', header: 'Email', sortable: true },
-  { key: 'status', header: 'Status', sortable: true, width: '100px' },
+  { key: 'status', header: 'Status', sortable: false, width: '100px' },
 ];
 
 function makeRows(count: number): TableRow[] {
@@ -21,6 +21,10 @@ const meta: Meta<TableComponent> = {
   title: 'Shared/UI/Table',
   component: TableComponent,
   tags: ['autodocs'],
+  argTypes: {
+    columns: { control: false },
+    rows: { control: false },
+  },
 };
 
 export default meta;
@@ -31,10 +35,24 @@ export const Default: Story = {
 };
 
 export const TenThousandRows: Story = {
-  name: '10 000 rows (virtual scroll)',
+  name: '10 000 rows — virtual scroll',
   args: { columns: COLUMNS, rows: makeRows(10_000) },
 };
 
 export const Empty: Story = {
+  name: 'Empty state',
   args: { columns: COLUMNS, rows: [] },
+};
+
+export const SingleRow: Story = {
+  name: 'Single row',
+  args: { columns: COLUMNS, rows: makeRows(1) },
+};
+
+export const NonSortableColumns: Story = {
+  name: 'Non-sortable columns',
+  args: {
+    columns: COLUMNS.map((c) => ({ ...c, sortable: false })),
+    rows: makeRows(20),
+  },
 };
