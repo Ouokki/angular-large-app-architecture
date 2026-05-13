@@ -76,7 +76,10 @@ describe('InputComponent', () => {
   it('calls onTouched when input is blurred', () => {
     const onTouchedSpy = jest.fn();
     spectator.component.registerOnTouched(onTouchedSpy);
-    const input = spectator.query('input')!;
+    const input = spectator.query('input');
+    if (!input) {
+      throw new Error('Expected input to render');
+    }
     input.dispatchEvent(new FocusEvent('blur'));
     spectator.detectChanges();
     expect(onTouchedSpy).toHaveBeenCalled();
