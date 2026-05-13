@@ -1,15 +1,25 @@
 export interface UserSettings {
-  theme: 'light' | 'dark' | 'system';
+  displayName: string;
+  email: string;
+  theme: 'light' | 'dark';
   language: string;
-  notificationsEnabled: boolean;
-  compactMode: boolean;
   timezone: string;
+  notifications: {
+    email: boolean;
+    push: boolean;
+    sms: boolean;
+  };
 }
 
 export const DEFAULT_SETTINGS: UserSettings = {
-  theme: 'system',
+  displayName: 'Demo User',
+  email: 'demo@example.com',
+  theme: 'light',
   language: 'en',
-  notificationsEnabled: true,
-  compactMode: false,
   timezone: 'UTC',
+  notifications: {
+    email: true,
+    push: true,
+    sms: false,
+  },
 };

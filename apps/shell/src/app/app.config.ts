@@ -10,6 +10,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app.routes';
 import {
   settingsReducer,
@@ -30,5 +31,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideStore({ [SETTINGS_FEATURE_KEY]: settingsReducer }),
     provideEffects([SettingsEffects]),
+    provideStoreDevtools({ maxAge: 25 }),
   ],
 };

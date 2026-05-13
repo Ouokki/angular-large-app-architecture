@@ -3,50 +3,63 @@
     <div>
       <p class="eyebrow">Preferences</p>
       <h1>Settings</h1>
-      <p>Configure workspace behavior, localization, and notification defaults.</p>
+      <p>Configure your profile, appearance, and notification preferences.</p>
     </div>
-    @if (dirty$ | async) {
-    <mat-chip class="dirty-badge" highlighted aria-live="polite">Unsaved changes</mat-chip>
+
+    @if (lastSaved()) {
+    <span class="saved-badge" role="status" aria-live="polite">Saved</span>
     }
   </header>
 
-  @if (loading$ | async) {
+  @if (loading()) {
   <div role="status" aria-live="polite" class="loading-state">
-    <mat-spinner diameter="36" aria-hidden="true"></mat-spinner>
+    <span class="spinner" aria-hidden="true"></span>
     <span>Loading settings...</span>
   </div>
-  } @if (error$ | async; as err) {
-  <div role="alert" class="error-banner">{{ err }}</div>
+  } @if (error()) {
+  <div role="alert" class="error-banner">{{ error() }}</div>
   }
 
   <div class="settings-layout">
     <aside class="settings-summary">
       <span class="summary-label">Profile</span>
       <strong>Workspace defaults</strong>
-      <p>These preferences are stored through NgRx state and update immediately.</p>
+      <p>
+        Stored via NgRx with optimistic update — changes apply instantly and roll back on error.
+      </p>
     </aside>
 
     <form [formGroup]="form" class="settings-form" aria-label="User settings form" novalidate>
+      <section class="settings-section">
+        <div class="section-heading">
+          <h2>Profile</h2>
+          <p>Your display name and email address.</p>
+        </div>
+        <div class="section-controls">
+          <div class="control-group">
+            <label for="display-name" class="control-label">Display name</label>
+            <input id="display-name" type="text" formControlName="displayName" class="form-input" />
+          </div>
+          <div class="control-group">
+            <label for="email" class="control-label">Email</label>
+            <input id="email" type="email" formControlName="email" class="form-input" />
+          </div>
+        </div>
+      </section>
+
       <section class="settings-section">
         <div class="section-heading">
           <h2>Appearance</h2>
           <p>Control how the workspace feels on screen.</p>
         </div>
         <div class="section-controls">
-          <div class="control-group control-wide">
-            <span class="control-label">Theme</span>
-            <mat-button-toggle-group
-              formControlName="theme"
-              aria-label="Theme"
-              class="segmented-control"
-            >
-              <mat-button-toggle value="light">Light</mat-button-toggle>
-              <mat-button-toggle value="dark">Dark</mat-button-toggle>
-              <mat-button-toggle value="system">System</mat-button-toggle>
-            </mat-button-toggle-group>
+          <div class="control-group">
+            <label for="theme" class="control-label">Theme</label>
+            <select id="theme" formControlName="theme" class="form-select">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
           </div>
-
-          <mat-slide-toggle formControlName="compactMode">Compact mode</mat-slide-toggle>
         </div>
       </section>
 
@@ -56,48 +69,57 @@
           <p>Choose language and timezone defaults.</p>
         </div>
         <div class="section-controls">
-          <div class="control-group control-wide">
-            <span class="control-label">Language</span>
-            <mat-button-toggle-group
-              formControlName="language"
-              aria-label="Language"
-              class="segmented-control language-control"
-            >
-              <mat-button-toggle value="en">English</mat-button-toggle>
-              <mat-button-toggle value="fr">French</mat-button-toggle>
-              <mat-button-toggle value="de">German</mat-button-toggle>
-              <mat-button-toggle value="es">Spanish</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-
           <div class="control-group">
-            <span class="control-label">Timezone</span>
-            <mat-form-field appearance="outline" class="timezone-field" subscriptSizing="dynamic">
-              <mat-select formControlName="timezone" aria-label="Timezone">
-                <mat-option value="UTC">UTC</mat-option>
-                <mat-option value="Europe/Paris">Europe/Paris</mat-option>
-                <mat-option value="America/New_York">America/New York</mat-option>
-                <mat-option value="Asia/Tokyo">Asia/Tokyo</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <label for="language" class="control-label">Language</label>
+            <select id="language" formControlName="language" class="form-select">
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="es">Spanish</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="timezone" class="control-label">Timezone</label>
+            <select id="timezone" formControlName="timezone" class="form-select">
+              <option value="UTC">UTC</option>
+              <option value="Europe/Paris">Europe/Paris</option>
+              <option value="America/New_York">America/New York</option>
+              <option value="Asia/Tokyo">Asia/Tokyo</option>
+            </select>
           </div>
         </div>
       </section>
 
-      <section class="settings-section">
+      <section class="settings-section" formGroupName="notifications">
         <div class="section-heading">
           <h2>Notifications</h2>
-          <p>Manage workspace update signals.</p>
+          <p>Choose how you want to be notified.</p>
         </div>
-        <div class="section-controls single-control">
-          <mat-slide-toggle formControlName="notificationsEnabled">
-            Enable notifications
-          </mat-slide-toggle>
+        <div class="section-controls">
+          <label class="checkbox-label">
+            <input id="notifications-email" type="checkbox" formControlName="email" />
+            Email notifications
+          </label>
+          <label class="checkbox-label">
+            <input id="notifications-push" type="checkbox" formControlName="push" />
+            Push notifications
+          </label>
+          <label class="checkbox-label">
+            <input id="notifications-sms" type="checkbox" formControlName="sms" />
+            SMS notifications
+          </label>
         </div>
       </section>
 
       <footer class="settings-footer">
-        <button mat-stroked-button type="button" (click)="onReset()">Reset to defaults</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="saving() || form.invalid"
+          (click)="onSave()"
+        >
+          @if (saving()) { Saving… } @else { Save settings }
+        </button>
       </footer>
     </form>
   </div>

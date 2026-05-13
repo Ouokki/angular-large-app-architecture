@@ -19,6 +19,7 @@
     "@angular/router": "~18.2.0",
     "@ngrx/effects": "^18.1.1",
     "@ngrx/store": "^18.1.1",
+    "@ngrx/store-devtools": "^21.1.0",
     "@nx/angular": "19.8.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

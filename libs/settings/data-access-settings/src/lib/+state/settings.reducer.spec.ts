@@ -2,8 +2,9 @@ import {
   loadSettings,
   loadSettingsFailure,
   loadSettingsSuccess,
-  resetSettings,
-  updateSettings,
+  saveSettings,
+  saveSettingsFailure,
+  saveSettingsSuccess,
 } from './settings.actions';
 import { initialState, settingsReducer } from './settings.reducer';
 import { DEFAULT_SETTINGS } from './settings.model';
@@ -14,45 +15,59 @@ describe('settingsReducer', () => {
     expect(state).toEqual(initialState);
   });
 
-  it('sets loading true on loadSettings', () => {
-    const state = settingsReducer(initialState, loadSettings());
+  it('sets loading true and clears error on loadSettings', () => {
+    const state = settingsReducer({ ...initialState, error: 'prev error' }, loadSettings());
     expect(state.loading).toBe(true);
     expect(state.error).toBeNull();
   });
 
-  it('sets settings and clears loading on loadSettingsSuccess', () => {
+  it('applies settings and clears loading on loadSettingsSuccess', () => {
     const settings = { ...DEFAULT_SETTINGS, theme: 'dark' as const };
     const loading = settingsReducer(initialState, loadSettings());
     const state = settingsReducer(loading, loadSettingsSuccess({ settings }));
     expect(state.settings.theme).toBe('dark');
     expect(state.loading).toBe(false);
-    expect(state.dirty).toBe(false);
   });
 
   it('sets error on loadSettingsFailure', () => {
-    const state = settingsReducer(initialState, loadSettingsFailure({ error: 'err' }));
-    expect(state.error).toBe('err');
+    const state = settingsReducer(initialState, loadSettingsFailure({ error: 'Load failed' }));
+    expect(state.error).toBe('Load failed');
     expect(state.loading).toBe(false);
   });
 
-  it('merges patch on updateSettings', () => {
-    const state = settingsReducer(initialState, updateSettings({ patch: { language: 'fr' } }));
-    expect(state.settings.language).toBe('fr');
-    expect(state.dirty).toBe(true);
+  it('applies optimistic update and stores previousSettings on saveSettings', () => {
+    const newSettings = { ...DEFAULT_SETTINGS, theme: 'dark' as const };
+    const state = settingsReducer(initialState, saveSettings({ settings: newSettings }));
+    expect(state.settings.theme).toBe('dark');
+    expect(state.previousSettings).toEqual(DEFAULT_SETTINGS);
+    expect(state.saving).toBe(true);
+    expect(state.error).toBeNull();
   });
 
-  it('preserves other settings on partial patch', () => {
-    const state = settingsReducer(initialState, updateSettings({ patch: { compactMode: true } }));
-    expect(state.settings.theme).toBe(DEFAULT_SETTINGS.theme);
-    expect(state.settings.compactMode).toBe(true);
-  });
-
-  it('resets to initial state on resetSettings', () => {
-    const modified = settingsReducer(
+  it('clears previousSettings and sets lastSaved on saveSettingsSuccess', () => {
+    const intermediate = settingsReducer(
       initialState,
-      updateSettings({ patch: { language: 'de', compactMode: true } }),
+      saveSettings({ settings: { ...DEFAULT_SETTINGS, theme: 'dark' as const } }),
     );
-    const state = settingsReducer(modified, resetSettings());
-    expect(state).toEqual(initialState);
+    const state = settingsReducer(
+      intermediate,
+      saveSettingsSuccess({ settings: intermediate.settings }),
+    );
+    expect(state.previousSettings).toBeNull();
+    expect(state.saving).toBe(false);
+    expect(state.lastSaved).not.toBeNull();
+  });
+
+  it('rolls back to previousSettings on saveSettingsFailure', () => {
+    const newSettings = { ...DEFAULT_SETTINGS, theme: 'dark' as const };
+    const intermediate = settingsReducer(initialState, saveSettings({ settings: newSettings }));
+    const state = settingsReducer(
+      intermediate,
+      saveSettingsFailure({ previousSettings: DEFAULT_SETTINGS, error: 'err' }),
+    );
+    expect(state.settings).toEqual(DEFAULT_SETTINGS);
+    expect(state.previousSettings).toBeNull();
+    expect(state.saving).toBe(false);
+    expect(state.error).toBeTruthy();
   });
 });

@@ -1,82 +1,66 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, effect, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  loadSettings,
-  resetSettings,
-  selectSettings,
-  selectSettingsDirty,
-  selectSettingsError,
-  selectSettingsLoading,
-  updateSettings,
+  DEFAULT_SETTINGS,
   UserSettings,
+  loadSettings,
+  saveSettings,
+  selectError,
+  selectLastSaved,
+  selectLoading,
+  selectSaving,
+  selectSettings,
 } from '@angular-large-app/settings/data-access-settings';
-import { AsyncPipe } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-settings-page',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    ReactiveFormsModule,
-    AsyncPipe,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatChipsModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-  ],
+  imports: [ReactiveFormsModule],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.scss',
 })
-export class SettingsPageComponent implements OnInit, OnDestroy {
+export class SettingsPageComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly fb = inject(FormBuilder);
-  private readonly destroy$ = new Subject<void>();
 
-  readonly loading$ = this.store.select(selectSettingsLoading);
-  readonly error$ = this.store.select(selectSettingsError);
-  readonly dirty$ = this.store.select(selectSettingsDirty);
+  readonly settings = toSignal(this.store.select(selectSettings), {
+    initialValue: DEFAULT_SETTINGS,
+  });
+  readonly loading = toSignal(this.store.select(selectLoading), { initialValue: false });
+  readonly saving = toSignal(this.store.select(selectSaving), { initialValue: false });
+  readonly error = toSignal(this.store.select(selectError), { initialValue: null });
+  readonly lastSaved = toSignal(this.store.select(selectLastSaved), { initialValue: null });
 
   readonly form = this.fb.group({
-    theme: this.fb.nonNullable.control<UserSettings['theme']>('system'),
+    displayName: this.fb.nonNullable.control('', [Validators.required]),
+    email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
+    theme: this.fb.nonNullable.control<UserSettings['theme']>('light'),
     language: this.fb.nonNullable.control('', [Validators.required]),
-    notificationsEnabled: this.fb.nonNullable.control(true),
-    compactMode: this.fb.nonNullable.control(false),
     timezone: this.fb.nonNullable.control('', [Validators.required]),
+    notifications: this.fb.nonNullable.group({
+      email: this.fb.nonNullable.control(true),
+      push: this.fb.nonNullable.control(true),
+      sms: this.fb.nonNullable.control(false),
+    }),
   });
 
-  ngOnInit(): void {
-    this.store.dispatch(loadSettings());
-
-    this.store
-      .select(selectSettings)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((settings) => {
-        this.form.patchValue(settings, { emitEvent: false });
-      });
-
-    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((patch) => {
-      this.store.dispatch(updateSettings({ patch: patch as Partial<UserSettings> }));
+  constructor() {
+    // Patch the form whenever the store emits a new settings value (e.g. after load)
+    effect(() => {
+      const s = this.settings();
+      this.form.patchValue(s, { emitEvent: false });
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngOnInit(): void {
+    this.store.dispatch(loadSettings());
   }
 
-  protected onReset(): void {
-    this.store.dispatch(resetSettings());
+  protected onSave(): void {
+    if (this.form.invalid) return;
+    this.store.dispatch(saveSettings({ settings: this.form.getRawValue() as UserSettings }));
   }
 }

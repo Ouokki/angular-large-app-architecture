@@ -44,6 +44,9 @@ importers:
       '@ngrx/store':
         specifier: ^18.1.1
         version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      '@ngrx/store-devtools':
+        specifier: ^21.1.0
+        version: 21.1.0(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)
       '@nx/angular':
         specifier: 19.8.14
         version: 19.8.14(@angular-devkit/build-angular@18.2.21(ec5b1b22ad706290d48c57e4718b7b9e))(@angular-devkit/core@18.2.21(chokidar@3.6.0))(@angular-devkit/schematics@18.2.21(chokidar@3.6.0))(@babel/traverse@7.29.0)(@schematics/angular@18.2.21(chokidar@3.6.0))(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21))(@types/node@18.16.9)(@zkochan/js-yaml@0.0.7)(esbuild@0.23.0)(eslint@9.39.4(jiti@1.21.7))(html-webpack-plugin@5.6.7(webpack@5.106.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(esbuild@0.23.0)(postcss@8.5.14)))(nx@19.8.14(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.21))(@swc/types@0.1.26)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.21)))(postcss@8.5.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rxjs@7.8.2)(typescript@5.5.4)
@@ -2397,6 +2400,13 @@ packages:
     peerDependencies:
       '@angular/core': ^18.0.0
       '@ngrx/store': 18.1.1
+      rxjs: ^6.5.3 || ^7.5.0
+
+  '@ngrx/store-devtools@21.1.0':
+    resolution: {integrity: sha512-agN2qzVg3dA9N4/0+WMBHCbCJ6SPJbDswDbz2UQZLFBYOghXMuII51TuhRrWdHGrK5QyCBAQ9wOSFbPFGYU91g==}
+    peerDependencies:
+      '@angular/core': ^21.0.0
+      '@ngrx/store': 21.1.0
       rxjs: ^6.5.3 || ^7.5.0
 
   '@ngrx/store@18.1.1':
@@ -12575,6 +12585,13 @@ snapshots:
       tslib: 2.8.1
 
   '@ngrx/effects@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngrx/store-devtools@21.1.0(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)':
     dependencies:
       '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
       '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)

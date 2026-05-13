@@ -4,22 +4,27 @@ import {
   loadSettings,
   loadSettingsFailure,
   loadSettingsSuccess,
-  resetSettings,
-  updateSettings,
+  saveSettings,
+  saveSettingsFailure,
+  saveSettingsSuccess,
 } from './settings.actions';
 
 export interface SettingsState {
   settings: UserSettings;
+  previousSettings: UserSettings | null;
   loading: boolean;
+  saving: boolean;
   error: string | null;
-  dirty: boolean;
+  lastSaved: string | null;
 }
 
 export const initialState: SettingsState = {
   settings: DEFAULT_SETTINGS,
+  previousSettings: null,
   loading: false,
+  saving: false,
   error: null,
-  dirty: false,
+  lastSaved: null,
 };
 
 export const settingsReducer = createReducer(
@@ -31,7 +36,7 @@ export const settingsReducer = createReducer(
     ...state,
     settings,
     loading: false,
-    dirty: false,
+    error: null,
   })),
 
   on(loadSettingsFailure, (state, { error }) => ({
@@ -40,11 +45,29 @@ export const settingsReducer = createReducer(
     error,
   })),
 
-  on(updateSettings, (state, { patch }) => ({
+  // Optimistic update: apply new settings immediately, keep previous for rollback
+  on(saveSettings, (state, { settings }) => ({
     ...state,
-    settings: { ...state.settings, ...patch },
-    dirty: true,
+    previousSettings: state.settings,
+    settings,
+    saving: true,
+    error: null,
   })),
 
-  on(resetSettings, () => ({ ...initialState })),
+  on(saveSettingsSuccess, (state, { settings }) => ({
+    ...state,
+    settings,
+    previousSettings: null,
+    saving: false,
+    lastSaved: new Date().toISOString(),
+  })),
+
+  // Rollback: restore previousSettings when the persist step fails
+  on(saveSettingsFailure, (state, { previousSettings }) => ({
+    ...state,
+    settings: previousSettings,
+    previousSettings: null,
+    saving: false,
+    error: 'Failed to save settings. Your changes have been reverted.',
+  })),
 );

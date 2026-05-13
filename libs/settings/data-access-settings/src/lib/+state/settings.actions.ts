@@ -1,23 +1,23 @@
-import { createAction, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { UserSettings } from './settings.model';
 
-export const loadSettings = createAction('[Settings] Load Settings');
+export const SettingsActions = createActionGroup({
+  source: 'Settings',
+  events: {
+    'Load Settings': emptyProps(),
+    'Load Settings Success': props<{ settings: UserSettings }>(),
+    'Load Settings Failure': props<{ error: string }>(),
+    'Save Settings': props<{ settings: UserSettings }>(),
+    'Save Settings Success': props<{ settings: UserSettings }>(),
+    'Save Settings Failure': props<{ previousSettings: UserSettings; error: string }>(),
+  },
+});
 
-export const loadSettingsSuccess = createAction(
-  '[Settings] Load Settings Success',
-  props<{ settings: UserSettings }>(),
-);
-
-export const loadSettingsFailure = createAction(
-  '[Settings] Load Settings Failure',
-  props<{ error: string }>(),
-);
-
-export const updateSettings = createAction(
-  '[Settings] Update Settings',
-  props<{ patch: Partial<UserSettings> }>(),
-);
-
-export const saveSettingsSuccess = createAction('[Settings] Save Settings Success');
-
-export const resetSettings = createAction('[Settings] Reset Settings');
+export const {
+  loadSettings,
+  loadSettingsSuccess,
+  loadSettingsFailure,
+  saveSettings,
+  saveSettingsSuccess,
+  saveSettingsFailure,
+} = SettingsActions;
