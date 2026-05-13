@@ -1,4 +1,5 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, provideZoneChangeDetection } from '@angular/core';
+import { GlobalErrorHandler } from './error-handler/global-error-handler';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -32,5 +33,6 @@ export const appConfig: ApplicationConfig = {
     provideStore({ [SETTINGS_FEATURE_KEY]: settingsReducer }),
     provideEffects([SettingsEffects]),
     provideStoreDevtools({ maxAge: 25 }),
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
 };

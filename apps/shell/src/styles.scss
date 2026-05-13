@@ -191,3 +191,29 @@ body[data-theme='dark'] tbody tr:hover {
   --mdc-elevated-card-container-shape: 8px;
   --mdc-outlined-card-container-shape: 8px;
 }
+
+/* Notification snackbar variants */
+.notification--success .mat-mdc-snack-bar-label {
+  color: #166534;
+}
+
+.notification--success .mdc-snackbar__surface {
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+}
+
+.notification--error .mat-mdc-snack-bar-label {
+  color: #fff1f2;
+}
+
+.notification--error .mdc-snackbar__surface {
+  background: #be123c;
+}
+
+.notification--info .mdc-snackbar__surface {
+  background: #1e3a5f;
+}
+
+.notification--info .mat-mdc-snack-bar-label {
+  color: #e0f2fe;
+}
