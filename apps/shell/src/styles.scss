@@ -68,6 +68,49 @@ a {
   color: inherit;
 }
 
+/* Settings page theme tokens — defined globally so they cascade through the component
+   and can be overridden by the dark-mode selector without :host-context() hacks */
+.settings-page {
+  --settings-accent: #0f766e;
+  --settings-accent-hover: #115e59;
+  --settings-accent-text: #ffffff;
+  --settings-bg: #f5f7fb;
+  --settings-border: #d7e0ea;
+  --settings-card: #ffffff;
+  --settings-control-bg: #ffffff;
+  --settings-control-border: #aab8c8;
+  --settings-control-focus: #0f766e;
+  --settings-control-text: #0f172a;
+  --settings-muted: #64748b;
+  --settings-panel: #243126;
+  --settings-panel-border: rgb(255 255 255 / 0.12);
+  --settings-panel-muted: #cbd5d8;
+  --settings-text: #0f172a;
+}
+
+body[data-theme='dark'] .settings-page {
+  --settings-accent: #2dd4bf;
+  --settings-accent-hover: #5eead4;
+  --settings-accent-text: #062f2c;
+  --settings-bg: #141518;
+  --settings-border: #3e4652;
+  --settings-card: #202329;
+  --settings-control-bg: #15181d;
+  --settings-control-border: #596473;
+  --settings-control-focus: #f59e0b;
+  --settings-control-text: #f8fafc;
+  --settings-muted: #b5bfca;
+  --settings-panel: #17231f;
+  --settings-panel-border: rgb(255 255 255 / 0.14);
+  --settings-panel-muted: #b8c7c4;
+  --settings-text: #f8fafc;
+}
+
+body[data-theme='dark'] .field-error,
+body[data-theme='dark'] .footer-error {
+  color: #fda4af;
+}
+
 .mat-mdc-form-field {
   --mdc-outlined-text-field-container-shape: 8px;
   --mdc-outlined-text-field-caret-color: #0f766e;
