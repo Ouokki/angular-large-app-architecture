@@ -1,134 +1,147 @@
 # angular-large-app-architecture
 
-A reference Angular 18 + Nx 19 monorepo demonstrating enterprise-scale architecture patterns.
+> Reference Angular 18 + Nx 19 monorepo — battle-tested patterns for 100k+ LOC codebases
 
-[![CI](https://github.com/Ouokki/angular-large-app-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/Ouokki/angular-large-app-architecture/actions/workflows/ci.yml)
+[![Angular](https://img.shields.io/badge/Angular-18-dd0031?logo=angular)](https://angular.dev)
+[![Nx](https://img.shields.io/badge/Nx-19-143055?logo=nx)](https://nx.dev)
+[![CI](https://github.com/Ouokki/angular-large-app-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/Ouokki/angular-large-app-architecture/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
----
-
-## Architecture Overview
-
-```text
-apps/
-  shell/                  # Host application (routing, layouts, providers)
-
-libs/
-  shared/
-    ui-button/            # Accessible button: variants, sizes, loading state
-    ui-input/             # ControlValueAccessor input with reactive forms
-    ui-table/             # CDK virtual-scroll table (10k+ rows), sorting, filtering
-    ui-modal/             # CDK dialog modal with focus trap & escape handling
-
-  dashboard/
-    data-access-metrics/  # Signals-based MetricsService (transient state)
-    feat-dashboard/       # Dashboard page: metric cards + 10k-row activity table
-
-  settings/
-    data-access-settings/ # NgRx store: actions, reducer, selectors, effects
-    feat-settings/        # Settings page with reactive forms bound to NgRx
-
-tools/
-  generators/             # Custom Nx generators: lib-feat, lib-ui, lib-data-access
-
-docs/
-  adr/                    # Architecture Decision Records
-```
-
-### Key Technology Decisions
-
-| Concern          | Choice                           | Rationale                                      |
-| ---------------- | -------------------------------- | ---------------------------------------------- |
-| Monorepo         | Nx 19                            | Module boundaries, affected builds, generators |
-| Package manager  | pnpm 10                          | Disk efficiency, strict hoisting               |
-| Angular version  | 18                               | Signals, `@if`/`@for` control flow, standalone |
-| Change detection | OnPush (enforced via ESLint)     | Performance at scale                           |
-| Transient state  | Angular Signals                  | Zero boilerplate, native CD integration        |
-| Persisted state  | NgRx 18                          | DevTools, effects, localStorage hydration      |
-| Styling          | Tailwind CSS 3.4 + CSS variables | Design tokens, dark mode via `data-theme`      |
-| Testing          | Jest 29 + @ngneat/spectator@17   | Fast, ergonomic component tests                |
-| Linting          | ESLint 9 flat config             | Module boundary + OnPush enforcement           |
-| Pre-commit       | Husky 9 + lint-staged 17         | Lint/format staged files before commit         |
+**[Live Demo](#)** · **[Storybook](#)** · **[Architecture Docs](./docs/)**
 
 ---
 
-## Prerequisites
+## Why this exists
 
-- Node.js 20+
-- pnpm 10+
+Most Angular tutorials stop at `ng new`. This repo starts where they stop.
 
-## Getting Started
+I've spent years shipping Angular apps in 24/7 production — banking, payments, aviation. The patterns that survived aren't the ones in the official docs. They're the ones we discovered after the codebase grew past 100k lines and we had to onboard five developers in two weeks, debug a change detection bug at 2 AM, and refactor a shared module without breaking three apps.
+
+This repo isolates those patterns. Every decision is documented in an ADR. Every constraint is enforced by a lint rule. The codebase is small enough to read in a day but structured the way a real production monorepo would be.
+
+If you're building Angular at scale — or learning to — this is the reference I wish I'd had.
+
+---
+
+## What's inside
+
+### Architecture
+
+- **Nx 19 monorepo** with enforced module boundaries (scope + type tags)
+- **Standalone components only** — zero NgModules in feature code
+- **ESLint ArchUnit-style rules** that prevent architecture erosion at lint time:
+  - No `HttpClient` in feature libraries
+  - No NgRx in UI libraries
+  - No feature imports in data-access libraries
+
+### State Management — Two Approaches, Documented
+
+This repo deliberately uses **two different state management patterns**:
+
+| Feature   | Approach                    | Why                                       |
+| --------- | --------------------------- | ----------------------------------------- |
+| Dashboard | Angular signals             | Local state, linear data flow, no sharing |
+| Settings  | NgRx with optimistic update | Global state, rollback-capable, auditable |
+
+[ADR-002](./docs/adr/002-signals-vs-ngrx.md) documents a 3-question rubric for choosing between them. About 80% of features should use signals.
+
+### Performance
+
+- **OnPush on every component**, enforced by ESLint ([ADR-004](./docs/adr/004-onpush-everywhere.md))
+- **Virtual scroll**: 10,000 activity rows, ~20 DOM nodes in the viewport
+- **Connection-aware preloading**: skips on 2G/saveData, delays 3s on 3G ([ADR-003](./docs/adr/003-preloading-strategy.md))
+- **Bundle budgets**: 350 kB initial warning · 600 kB error
+- See [docs/performance.md](./docs/performance.md) for measured numbers
+
+### Module Federation
+
+- Shell + remote-widgets as **separate Webpack 5 builds**
+- **Dynamic manifest-based** remote registration — no hard-coded URLs in webpack config
+- **Error boundary**: shell falls back gracefully if the remote is unavailable
+- [ADR-005](./docs/adr/0005-module-federation.md) explains the tradeoffs
+
+### Testing
+
+- **Jest + Spectator** for component and service unit tests
+- **Cypress 13** e2e for 6 critical user flows, including remote failure simulation
+- **Storybook 8** for UI library visual documentation
+- **ESLint** enforces architecture rules at lint time — no separate test runner needed
+
+---
+
+## Quick Start
 
 ```bash
-# Install dependencies
+# 1. Clone
+git clone https://github.com/Ouokki/angular-large-app-architecture.git
+cd angular-large-app-architecture
+
+# 2. Install
 pnpm install
 
-# Serve the shell app (development)
+# 3. Start the remote (Terminal 1)
+pnpm exec nx serve remote-widgets
+
+# 4. Start the shell (Terminal 2)
 pnpm exec nx serve shell
-
-# Run all unit tests
-pnpm exec nx run-many -t test --parallel=3
-
-# Lint all projects
-pnpm exec nx run-many -t lint --parallel=3
-
-# Build shell for production
-pnpm exec nx build shell --configuration=production
 ```
 
-## Module Boundary Rules
+Open [http://localhost:4200](http://localhost:4200). Login with any credentials (mock auth).
 
-Library tags enforce a strict dependency graph:
+---
 
-```text
-Scope rules:
-  scope:shell     → scope:dashboard, scope:settings, scope:shared
-  scope:dashboard → scope:shared  (NOT scope:settings)
-  scope:settings  → scope:shared  (NOT scope:dashboard)
-  scope:shared    → scope:shared  (NOT any feature scope)
+## Architecture Decisions
 
-Type rules:
-  type:feat         → type:ui, type:data-access, type:util
-  type:ui           → type:ui, type:util
-  type:data-access  → type:util
-  type:util         → type:util  (no upward dependencies)
-```
+| ADR                                          | Title                                       | Status   |
+| -------------------------------------------- | ------------------------------------------- | -------- |
+| [001](./docs/adr/001-module-boundaries.md)   | Nx module boundaries with scope + type tags | Accepted |
+| [002](./docs/adr/002-signals-vs-ngrx.md)     | Signals vs NgRx — when to use which         | Accepted |
+| [003](./docs/adr/003-preloading-strategy.md) | Connection-aware preloading strategy        | Accepted |
+| [004](./docs/adr/004-onpush-everywhere.md)   | OnPush change detection everywhere          | Accepted |
+| [005](./docs/adr/0005-module-federation.md)  | Module Federation for remote delivery       | Accepted |
 
-Boundaries are enforced at lint time via `@nx/eslint-plugin` module boundary rules in `eslint.config.js`.
+---
 
-## Custom Generators
+## What I Learned Building This
 
-```bash
-# New feature library
-pnpm exec nx g workspace:lib-feat --name=my-feature --scope=dashboard
+**NgModules were a tax, not a feature.** Every NgModule I ever wrote was a wrapper around a list of components and a list of imports. Standalone components do the same thing with zero ceremony. I don't miss them.
 
-# New UI library
-pnpm exec nx g workspace:lib-ui --name=my-widget --scope=shared
+**Signals don't replace NgRx — they solve different problems.** I used to reach for NgRx reflexively. Now I ask three questions first: Is this state shared? Does it need rollback? Do I need time-travel debugging? If all three answers are no, signals are simpler and just as correct.
 
-# New data-access library (--withNgrx scaffolds NgRx boilerplate)
-pnpm exec nx g workspace:lib-data-access --name=my-store --scope=settings --withNgrx
-```
+**OnPush everywhere costs nothing when your data flow is clean.** The first time I turned on OnPush globally, it broke six components. Each one had the same root cause: mutable state being modified instead of replaced. Fixing the data flow took two days. The component tree has been free of change detection bugs since.
 
-## Architecture Decision Records
+**Module Federation is for organizational boundaries, not technical ones.** It's not about code splitting — lazy loading handles that. It's about shipping independently and having different teams own different remotes. If you're one team with one release, you probably don't need it.
 
-| ADR                                         | Title                                   |
-| ------------------------------------------- | --------------------------------------- |
-| [0001](docs/adr/0001-signals-vs-ngrx.md)    | Signals vs NgRx state strategy          |
-| [0002](docs/adr/0002-onpush-enforcement.md) | OnPush change detection mandate         |
-| [0003](docs/adr/0003-bundle-budgets.md)     | Bundle size budgets and optimizer flags |
+---
 
-## Performance Configuration
+## Roadmap
 
-- **OnPush everywhere** — enforced via `@angular-eslint/prefer-on-push-component-change-detection: error`
-- **CDK Virtual Scroll** — `ui-table` renders only visible rows; tested with 10 000 rows
-- **Lazy routes** — all feature pages loaded on demand via `loadComponent()`
-- **Selective preloading** — `SelectivePreloadStrategy` preloads on fast connections only
-- **Bundle budgets** — initial 350 KB warn / 600 KB error; lazy 150 KB warn / 300 KB error
-- **Optimizer flags** — `inlineCritical: true` for faster FCP in production
+- [ ] SSR with Angular Universal (server-side rendering for SEO)
+- [ ] i18n (French, English, Arabic with RTL layout)
+- [ ] Predictive preloading via hover intent
+- [ ] PWA configuration with Service Worker precaching
+- [ ] Lighthouse CI budget enforcement in GitHub Actions
+
+---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+---
 
 ## License
 
-[MIT](LICENSE)
+MIT — see [LICENSE](./LICENSE).
+
+---
+
+## About me
+
+I'm **Ouokki**, Tech Lead Java/Angular with 5+ years shipping critical applications in banking, payments, and aviation. I currently lead frontend architecture on a major airline modernisation project.
+
+Available for Angular freelance missions — architecture audits, performance refactors, team coaching, hands-on Tech Lead roles. Through portage salarial.
+
+→ **Malt**: [https://www.malt.fr/profile/[your-slug]](https://www.malt.fr/profile/)  
+→ **LinkedIn**: [https://www.linkedin.com/in/[your-handle]](https://www.linkedin.com/in/)  
+→ **Blog**: [https://[your-handle].hashnode.dev](https://hashnode.dev)
