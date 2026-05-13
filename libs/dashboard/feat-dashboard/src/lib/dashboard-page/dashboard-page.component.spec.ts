@@ -36,21 +36,44 @@ describe('DashboardPageComponent', () => {
     expect(spectator.query('app-ui-table')).toBeTruthy();
   });
 
-  it('shows loading state when loading is true', () => {
+  it('shows skeleton cards when isLoading is true', () => {
     metricsService['_state'].update((s) => ({ ...s, loading: true }));
     spectator.detectChanges();
-    expect(spectator.query('[role="status"]')).toBeTruthy();
+    expect(spectator.queryAll('app-skeleton-card').length).toBe(4);
   });
 
-  it('shows error banner when error is set', () => {
+  it('shows skeleton table rows when isLoading is true', () => {
+    metricsService['_state'].update((s) => ({ ...s, loading: true }));
+    spectator.detectChanges();
+    expect(spectator.queryAll('app-skeleton-table-row').length).toBe(8);
+  });
+
+  it('shows error state with retry button when error is set', () => {
     metricsService['_state'].update((s) => ({
       ...s,
       loading: false,
+      cards: [],
       error: 'Network error',
     }));
     spectator.detectChanges();
     expect(spectator.query('[role="alert"]')).toBeTruthy();
+    expect(spectator.query('.retry-btn')).toBeTruthy();
     expect(spectator.query('[role="alert"]')?.textContent).toContain('Network error');
+  });
+
+  it('shows empty state when metrics array is empty', () => {
+    metricsService['_state'].update((s) => ({ ...s, loading: false, cards: [], error: null }));
+    spectator.detectChanges();
+    expect(spectator.query('.empty-state')).toBeTruthy();
+  });
+
+  it('clicking retry calls reload()', () => {
+    const reloadSpy = jest.spyOn(metricsService, 'reload');
+    metricsService['_state'].update((s) => ({ ...s, loading: false, cards: [], error: 'err' }));
+    spectator.detectChanges();
+    const btn = spectator.query('.retry-btn') as HTMLButtonElement;
+    btn?.click();
+    expect(reloadSpy).toHaveBeenCalled();
   });
 
   it('updates filterText on input event', () => {

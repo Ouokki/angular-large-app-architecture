@@ -53,6 +53,10 @@ export class MetricsService {
   readonly loading = computed(() => this._state().loading);
   readonly error = computed(() => this._state().error);
 
+  // Aliases used by the viewState computed signal in the dashboard component
+  readonly isLoading = this.loading;
+  readonly metrics = this.cards;
+
   loadDashboard(): void {
     this._state.update((s) => ({ ...s, loading: true, error: null }));
 
@@ -67,6 +71,11 @@ export class MetricsService {
       const message = err instanceof Error ? err.message : 'Unknown error';
       this._state.update((s) => ({ ...s, loading: false, error: message }));
     }
+  }
+
+  reload(): void {
+    this._state.update((s) => ({ ...s, loading: true, error: null }));
+    this.loadDashboard();
   }
 
   refreshCards(): void {
