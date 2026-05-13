@@ -7,6 +7,12 @@ function getButtons(fixture: ComponentFixture<WidgetCatalogComponent>): HTMLButt
   );
 }
 
+function getCards(fixture: ComponentFixture<WidgetCatalogComponent>): HTMLElement[] {
+  return Array.from(
+    (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('mat-card.widget-card'),
+  );
+}
+
 describe('WidgetCatalogComponent', () => {
   let fixture: ComponentFixture<WidgetCatalogComponent>;
 
@@ -20,8 +26,7 @@ describe('WidgetCatalogComponent', () => {
   });
 
   it('renders all widgets by default', () => {
-    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('article');
-    expect(cards.length).toBe(6);
+    expect(getCards(fixture).length).toBe(6);
   });
 
   it('renders the heading', () => {
@@ -34,8 +39,7 @@ describe('WidgetCatalogComponent', () => {
     formBtn?.click();
     fixture.detectChanges();
 
-    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('article');
-    expect(cards.length).toBe(2);
+    expect(getCards(fixture).length).toBe(2);
   });
 
   it('resets to all widgets when All button is clicked', () => {
@@ -47,8 +51,7 @@ describe('WidgetCatalogComponent', () => {
     allBtn?.click();
     fixture.detectChanges();
 
-    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('article');
-    expect(cards.length).toBe(6);
+    expect(getCards(fixture).length).toBe(6);
   });
 
   it('filters to one widget for the Layout category', () => {
@@ -56,13 +59,12 @@ describe('WidgetCatalogComponent', () => {
     layoutBtn?.click();
     fixture.detectChanges();
 
-    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('article');
-    expect(cards.length).toBe(1);
+    expect(getCards(fixture).length).toBe(1);
   });
 
   it('displays widget status badges including stable, beta, and new', () => {
     const badges = Array.from(
-      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('span.capitalize'),
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('mat-chip'),
     );
     const statuses = badges.map((b) => b.textContent?.trim().toLowerCase());
     expect(statuses).toContain('stable');
