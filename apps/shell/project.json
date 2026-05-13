@@ -144,6 +144,23 @@
         "staticFilePath": "dist/apps/shell/browser",
         "spa": true
       }
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/shell/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "shell:serve-static"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "shell:serve-static"
+        },
+        "ci": {
+          "devServerTarget": "shell:serve-static",
+          "video": false
+        }
+      }
     }
   }
 }

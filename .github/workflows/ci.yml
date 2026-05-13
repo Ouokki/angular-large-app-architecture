@@ -46,9 +46,56 @@ jobs:
       - name: Build affected
         run: pnpm exec nx affected -t build --parallel=2
 
+  e2e:
+    name: E2E (Cypress)
+    runs-on: ubuntu-latest
+    needs: main
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shell + remote-widgets (production)
+        run: pnpm exec nx run-many -t build --projects=shell,remote-widgets --configuration=production --parallel=2
+
+      - name: Serve remote-widgets on port 4201
+        run: npx serve dist/apps/remote-widgets --listen 4201 &
+
+      - name: Run Cypress against shell (serve-static)
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          command: pnpm exec nx e2e shell --configuration=ci --no-cache
+        env:
+          CYPRESS_BASE_URL: http://localhost:4200
+
+      - name: Upload Cypress screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: apps/shell/cypress/screenshots
+          retention-days: 7
+
   release:
     name: Release
-    needs: main
+    needs: [main, e2e]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
