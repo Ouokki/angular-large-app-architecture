@@ -37,6 +37,9 @@ jobs:
       - name: Set base/head for affected
         uses: nrwl/nx-set-shas@v4
 
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high
+
       - name: Lint affected
         run: pnpm exec nx affected -t lint --parallel=3
 
