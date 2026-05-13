@@ -1,0 +1,22 @@
+# Global fallback — everything not matched below
+* @Ouokki
+
+# CI / GitHub configuration
+.github/ @Ouokki
+
+# Shared component library — review required for any UI change
+libs/shared/ @Ouokki
+
+# Feature libs
+libs/dashboard/ @Ouokki
+libs/settings/ @Ouokki
+
+# Shell app and Module Federation config
+apps/shell/ @Ouokki
+apps/remote-widgets/ @Ouokki
+
+# Workspace tooling
+nx.json @Ouokki
+package.json @Ouokki
+pnpm-lock.yaml @Ouokki
+tools/ @Ouokki
